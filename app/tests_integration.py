@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.shortcuts import reverse
 from app.models import Client, Product, Pet, Med, Provider
-from datetime import date, timedelta
+from datetime import date
 
 
 class HomePageTest(TestCase):
@@ -147,7 +147,7 @@ class ProvidersTest(TestCase):
                 "id": provider.id,
                 "name": "SuperFarm",
                 "email": "moltito@hotmail.com",
-                "address": "Rio negro 2265"
+                "address": "Rio negro 2265",
             },
         )
 
