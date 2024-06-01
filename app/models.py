@@ -11,6 +11,9 @@ def validate_client(data):
     if name == "":
         errors["name"] = "Por favor ingrese un nombre"
 
+    if any(char.isdigit() for char in name):
+        errors["name"] = "El nombre no puede contener números."
+
     if phone == "":
         errors["phone"] = "Por favor ingrese un teléfono"
 
