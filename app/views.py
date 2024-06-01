@@ -65,6 +65,10 @@ def pets_repository(request):
 
 def pets_form(request, id=None):
     breeds = dict(Pet.Breed.choices)
+    pet = None
+    if id:
+        pet = get_object_or_404(Pet, pk=id)  # Obtener la mascota si se proporciona un id
+
     if request.method == "POST":
         pet_id = request.POST.get("id", "")
         errors = {}
@@ -75,27 +79,17 @@ def pets_form(request, id=None):
             saved, errors = Pet.save_pet(request.POST)
         else:
             pet = get_object_or_404(Pet, pk=pet_id)
-            pet.update_pet(request.POST)
-        if birthday:
-            try:
-                birthday_format = datetime.strptime(birthday, "%Y-%m-%d").date()
-                if (birthday_format > date.today()):
-                    saved = False
-                    errors["birthday"] = "La fecha de nacimiento no puede ser posterior al día actual."
-            except ValueError as e:
-                errors["birthday"] = "Formato de fecha invalido. Utilice el formato YYYY-MM-DD"
-
+            saved, errors = pet.update_pet(request.POST)
+        
         if saved:
-            return redirect(reverse("pets_repo"))
+            return redirect(reverse("pets_repo"))  # Redireccionar si se guarda con éxito
 
+        # Pasar los errores y datos del formulario en caso de fallo
         return render(
             request, "pets/form.html", {"errors": errors, "pet": request.POST, "breeds": breeds}
         )
 
-    pet = None
-    if id is not None:
-        pet = get_object_or_404(Pet, pk=id)
-
+    # Renderizar el formulario para crear o editar una mascota
     return render(request, "pets/form.html", {"pet": pet, "breeds": breeds})
 
 def pets_delete(request):

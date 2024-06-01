@@ -303,11 +303,17 @@ class Pet(models.Model):
         return True, None
 
     def update_pet(self, pet_data):
-        self.name = pet_data.get("name", "") or self.name
-        self.breed = pet_data.get("breed", "") or self.breed
-        self.birthday = pet_data.get("birthday", "") or self.birthday
+        errors = validate_pet(pet_data)
+        if errors:
+            return False, errors
+
+        # Cambiado para usar valores predeterminados si no se proporcionan
+        self.name = pet_data.get("name", self.name)
+        self.breed = pet_data.get("breed", self.breed)
+        self.birthday = pet_data.get("birthday", self.birthday)
 
         self.save()
+        return True, None
 
 class Med(models.Model):
     name = models.CharField(max_length=100)
