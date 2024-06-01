@@ -11,7 +11,7 @@ class ClientModelTest(TestCase):
                 "phone": "221555232",
                 "address": "13 y 44",
                 "email": "brujita75@hotmail.com",
-            }
+            },
         )
         clients = Client.objects.all()
         self.assertEqual(len(clients), 1)
@@ -28,7 +28,7 @@ class ClientModelTest(TestCase):
                 "phone": "221555232",
                 "address": "13 y 44",
                 "email": "brujita75@hotmail.com",
-            }
+            },
         )
         client = Client.objects.get(pk=1)
 
@@ -47,7 +47,7 @@ class ClientModelTest(TestCase):
                 "phone": "221555232",
                 "address": "13 y 44",
                 "email": "brujita75@hotmail.com",
-            }
+            },
         )
         client = Client.objects.get(pk=1)
 
@@ -67,7 +67,7 @@ class ProviderModelTest(TestCase):
                 "email": "moltito@hotmail.com",
                 "address": "Rio negro 2265",
 
-            }
+            },
         )
         providers = Provider.objects.all()
         self.assertEqual(len(providers), 1)
@@ -83,7 +83,7 @@ class ProviderModelTest(TestCase):
                 "email": "moltito@hotmail.com",
                 "address": "Rio negro 2265",
 
-            }
+            },
         )
         provider = Provider.objects.get(pk=1)
 
@@ -101,7 +101,7 @@ class ProviderModelTest(TestCase):
                 "name": "Farmacity S.A",
                 "email": "moltito@hotmail.com",
                 "address": "Rio negro 2265",
-            }
+            },
         )
         provider = Provider.objects.get(pk=1)
 
@@ -121,7 +121,7 @@ class MedicineModelTest(TestCase):
                 "name": "Paracetamoldog",
                 "desc": "Este medicamento es para vomitos caninos",
                 "dose": 8,
-            }
+            },
         )
         medicines = Med.objects.all()
         self.assertEqual(len(medicines), 1)
@@ -136,7 +136,7 @@ class MedicineModelTest(TestCase):
                 "name": "Paracetamoldog",
                 "desc": "Este medicamento es para vomitos caninos",
                 "dose": 8,
-            }
+            },
         )
         medicine = Med.objects.get(pk=1)
 
@@ -147,7 +147,7 @@ class MedicineModelTest(TestCase):
                 "name": "Paracetamoldog",
                 "desc": "Este medicamento es para vomitos caninos",
                 "dose": 7,
-            }
+            },
         )
 
         medicine_updated = Med.objects.get(pk=1)
@@ -160,7 +160,7 @@ class MedicineModelTest(TestCase):
                 "name": "Paracetamoldog",
                 "desc": "Este medicamento es para vomitos caninos",
                 "dose": 8,
-            }
+            },
         )
         medicine = Med.objects.get(pk=1)
 
@@ -180,7 +180,7 @@ class ProductModelTest(TestCase):
                 "type": "Limpieza",
                 "price": "100",
                 "stock": "50",
-            }
+            },
         )
         products = Product.objects.all()
         self.assertEqual(len(products), 1)
@@ -197,7 +197,7 @@ class ProductModelTest(TestCase):
                 "type": "Limpieza",
                 "price": "100",
                 "stock": "50",
-            }
+            },
         )
         product = Product.objects.get(pk=1)
         self.assertEqual(product.stock, 50)
@@ -212,7 +212,7 @@ class ProductModelTest(TestCase):
                 "type": "Limpieza",
                 "price": "100",
                 "stock": "50",
-            }
+            },
         )
         product = Product.objects.get(pk=1)
         self.assertEqual(product.stock, 50)
@@ -227,7 +227,7 @@ class ProductModelTest(TestCase):
                 "type": "Limpieza",
                 "price": "100",
                 "stock": "50",
-            }
+            },
         )
         product = Product.objects.get(pk=1)
         self.assertEqual(product.stock, 50)
@@ -242,7 +242,7 @@ class ProductModelTest(TestCase):
                 "type": "Limpieza",
                 "price": "100",
                 "stock": "50",
-            }
+            },
         )
         product = Product.objects.get(pk=1)
         self.assertEqual(product.stock, 50)
@@ -258,7 +258,7 @@ class PetModelTest(TestCase):
                 "name": "Benita",
                 "breed": "Perro",
                 "birthday": pet_birthday,
-            }
+            },
         )
 
         pets = Pet.objects.all()
@@ -274,7 +274,7 @@ class PetModelTest(TestCase):
                 "name": "Benita",
                 "breed": "Perro",
                 "birthday": pet_birthday,
-            }
+            },
         )
 
         pet = Pet.objects.get(pk=1)
@@ -290,7 +290,7 @@ class PetModelTest(TestCase):
                 "name": "Benita",
                 "breed": "Perro",
                 "birthday": pet_birthday,
-            }
+            },
         )
 
         pet = Pet.objects.get(pk=1)
@@ -304,7 +304,7 @@ class PetModelTest(TestCase):
         pet_data = {
             "name": "Paco",
             "breed": "Perro",
-            "birthday": future_birthday
+            "birthday": future_birthday,
         }
         errors = validate_pet(pet_data)
         self.assertIn("birthday", errors)
