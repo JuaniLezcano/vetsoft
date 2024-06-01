@@ -476,7 +476,7 @@ class PetsTest(TestCase):
     def test_invalid_birthday_format(self):
         response = self.client.post(
             reverse("pets_form"),
-            data={"birthday": "2022-13-32"}  # Fecha en formato incorrecto
+            data={"birthday": "2022-13-32"},
         )
         self.assertContains(response, "Formato de fecha invalido. Utilice el formato YYYY-MM-DD")
         

@@ -469,7 +469,7 @@ class VeterinaryModelTest(TestCase):
         expected_errors = {
             "name": "Por favor ingrese un nombre",
             "phone": "Por favor ingrese un teléfono",
-            "email": "Por favor ingrese un email"
+            "email": "Por favor ingrese un email",
         }
         self.assertDictEqual(expected_errors, errors)
         
@@ -479,7 +479,7 @@ class VeterinaryModelTest(TestCase):
                 "email": "joserhotmail.com",}
         errors = validate_veterinary(data)
         expected_errors = {
-            "email": "Por favor ingrese un email valido"
+            "email": "Por favor ingrese un email valido",
         }
         self.assertDictEqual(expected_errors, errors)
         
