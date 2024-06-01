@@ -1,6 +1,8 @@
-from django.test import TestCase
-from app.models import Client, Product, Pet, Med, validate_pet, Provider
 from datetime import date, timedelta
+
+from django.test import TestCase
+
+from app.models import Client, Med, Pet, Product, Provider, validate_pet
 
 
 class ClientModelTest(TestCase):

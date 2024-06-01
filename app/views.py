@@ -1,7 +1,10 @@
-from django.shortcuts import render, redirect, reverse, get_object_or_404
-from .models import Client, Product , Med, Provider, Veterinary, Pet
-from django.contrib import messages
 from datetime import date, datetime
+
+from django.contrib import messages
+from django.shortcuts import get_object_or_404, redirect, render, reverse
+
+from .models import Client, Med, Pet, Product, Provider, Veterinary
+
 
 def home(request):
     return render(request, "home.html")
