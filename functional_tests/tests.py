@@ -244,6 +244,18 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
             "href", reverse("clients_edit", kwargs={"id": client.id})
         )
 
+    def test_should_be_able_to_show_error_if_invalid_phone(self):
+        self.page.goto(f"{self.live_server_url}{reverse('clients_form')}")
+
+        self.page.get_by_label("Nombre").fill("Benjamin Peres")
+        self.page.evaluate("document.querySelector('input[name=phone]').value = '221asd'")
+        self.page.get_by_label("Email").fill("benjaminperes@hotmail.com")
+        self.page.get_by_label("Dirección").fill("1 y 60")
+
+        self.page.get_by_role("button", name="Guardar").click()
+
+        expect(self.page.get_by_text("Por favor ingrese un teléfono")).to_be_visible()
+
 class MedicineRepoTestCase(PlaywrightTestCase):
     def test_should_show_message_if_table_is_empty(self):
         self.page.goto(f"{self.live_server_url}{reverse('meds_repo')}")

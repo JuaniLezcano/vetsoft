@@ -58,7 +58,37 @@ class ClientModelTest(TestCase):
         client_updated = Client.objects.get(pk=1)
 
         self.assertEqual(client_updated.phone, "221555232")
+        
+    def test_cant_update_client_with_characters_in_phone_input(self):
+        Client.save_client(
+            {
+                "name": "Benjamin Peres",
+                "phone": "2214504505",
+                "address": "1 y 60",
+                "email": "benjaminperes@hotmail.com",
+            }
+        )
+        client = Client.objects.get(pk=1)
 
+        client.update_client({"phone": "124asd"})
+        
+        client_updated = Client.objects.get(pk=1)
+
+        self.assertEqual(client_updated.phone, "2214504505")
+        
+    def test_cant_create_client_with_characters_in_phone_input(self):
+        Client.save_client(
+            {
+                "name": "Benjamin Peres",
+                "phone": "221asd",
+                "address": "1 y 60",
+                "email": "benjaminperes@hotmail.com",
+            }
+        )
+        clients = Client.objects.all()
+        self.assertEqual(len(clients), 0)
+        
+        
 class ProviderModelTest(TestCase):
     def test_can_create_and_get_provider(self):
         Provider.save_provider(

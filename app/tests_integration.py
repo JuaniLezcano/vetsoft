@@ -95,6 +95,39 @@ class ClientsTest(TestCase):
         self.assertEqual(editedClient.address, client.address)
         self.assertEqual(editedClient.email, client.email)
 
+    def test_validation_create_client_with_invalid_phone(self):
+        response = self.client.post(
+            reverse("clients_form"),
+            data={
+                "name": "Benjamin Peres",
+                "phone": "221asd",
+                "address": "1 y 60",
+                "email": "benjaminperes@hotmail.com",
+            },
+        )
+
+        self.assertContains(response, "Por favor ingrese un numero de telefono valido, solo digitos")
+        
+    def test_validation_update_with_invalid_phone(self):
+        client = Client.objects.create(
+                name= "Benjamin Peres",
+                phone= "2214504505",
+                address= "1 y 60",
+                email= "benjaminperes@hotmail.com",
+        )
+
+        response = self.client.post(
+            reverse("clients_form"),
+            data={
+                "id": client.id,
+                "phone": "123asd",
+            },
+        )
+
+        editedClient = Client.objects.get(pk=client.id)
+        
+        self.assertEqual(editedClient.phone, client.phone)
+        
 class ProvidersTest(TestCase):
     def test_can_create_client(self):
         response = self.client.post(
@@ -114,6 +147,7 @@ class ProvidersTest(TestCase):
 
 
         self.assertRedirects(response, reverse("providers_repo"))
+        
     def test_validation_invalid_email(self):
         response = self.client.post(
             reverse("providers_form"),
@@ -124,7 +158,8 @@ class ProvidersTest(TestCase):
             },
         )
 
-        self.assertContains(response, "Por favor ingrese un email valido")        
+        self.assertContains(response, "Por favor ingrese un email valido") 
+           
     def test_validation_errors_create_provider(self):
         response = self.client.post(
             reverse("providers_form"),
