@@ -180,8 +180,7 @@ class Product(models.Model):
         try:
             if (int(self.stock) < 0):
                 raise ValueError("El stock no puede ser negativo.")
-        except ValueError as e:
-            print(f"El stock no puede ser negativo: {e}")
+        except ValueError:
             self.stock = Product.objects.get(pk=self.pk).stock
 
         self.save()
