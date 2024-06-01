@@ -8,12 +8,14 @@ def validate_client(data):
     phone = data.get("phone", "")
     email = data.get("email", "")
 
+    
+    
     if name == "":
         errors["name"] = "Por favor ingrese un nombre"
-
     if phone == "":
         errors["phone"] = "Por favor ingrese un teléfono"
-
+    elif phone.isdigit() == False:
+        errors["phone"] = "Por favor ingrese un numero de telefono valido, solo digitos"
     if email == "":
         errors["email"] = "Por favor ingrese un email"
     elif email.count("@") == 0:
@@ -137,7 +139,8 @@ class Client(models.Model):
     def update_client(self, client_data):
         self.name = client_data.get("name", "") or self.name
         self.email = client_data.get("email", "") or self.email
-        self.phone = client_data.get("phone", "") or self.phone
+        if (client_data.get("phone", "").isdigit() == True):
+            self.phone = client_data.get("phone", "") or self.phone
         self.address = client_data.get("address", "") or self.address
 
         self.save()
