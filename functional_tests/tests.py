@@ -358,7 +358,7 @@ class productCreateEditTestCase(PlaywrightTestCase):
         expect(self.page.get_by_text("50")).to_be_visible()
 
     def test_increase_stock_product_by_touching_button(self):
-        product = Product.objects.create(
+        product = Product.objects.create(  # noqa: F841
             name="Lavandina",
             type="Limpieza",
             price=100,
@@ -377,7 +377,7 @@ class productCreateEditTestCase(PlaywrightTestCase):
         expect(self.page.get_by_text("51")).to_be_visible()
 
     def test_edit_form_should_be_able_to_throw_an_error_if_negative_stock(self):
-        product = Product.objects.create(
+        product = Product.objects.create(  # noqa: F841
             name="Lavandina",
             type="Limpieza",
             price=100,
@@ -474,7 +474,7 @@ class PetCreateEditTestCase(PlaywrightTestCase):
         expect(edit_action).to_have_attribute("href", reverse("pets_edit", kwargs={"id": pet.id}))
 
     def test_edit_form_should_be_able_to_throw_an_error_if(self):
-        pet = Pet.objects.create(
+        pet = Pet.objects.create(  # noqa: F841
             name="Paco",
             breed="Perro",
             birthday="2008-05-10",
