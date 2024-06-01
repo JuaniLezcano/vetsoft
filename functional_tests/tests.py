@@ -15,6 +15,28 @@ slow_mo = os.environ.get("SLOW_MO", 0)
 
 
 class PlaywrightTestCase(StaticLiveServerTestCase):
+    """
+    Clase base para pruebas utilizando Playwright.
+
+    Esta clase proporciona configuraciones básicas para ejecutar pruebas utilizando
+    el framework Playwright. Configura un navegador web y proporciona métodos de 
+    configuración y limpieza.
+
+    Atributos de Clase:
+        browser (Browser): Instancia del navegador web.
+        headless (bool): Define si el navegador se ejecutará en modo headless.
+        slow_mo (int): Retardo en milisegundos para ralentizar la ejecución del navegador.
+
+    Métodos de Clase:
+        setUpClass: Configura el navegador antes de iniciar las pruebas.
+        tearDownClass: Cierra el navegador después de finalizar las pruebas.
+
+    Métodos:
+        setUp: Configura una nueva página del navegador antes de cada prueba.
+        tearDown: Cierra la página del navegador después de cada prueba.
+
+    
+    """
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -37,6 +59,12 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
 
 
 class HomeTestCase(PlaywrightTestCase):
+    """
+    Clase de caso de prueba para probar la funcionalidad de la página de inicio.
+
+    Esta clase incluye métodos de prueba para verificar la presencia de la barra de navegación con enlaces y tarjetas de inicio con enlaces.
+    
+    """
     def test_should_have_navbar_with_links(self):
         self.page.goto(self.live_server_url)
 
@@ -63,6 +91,14 @@ class HomeTestCase(PlaywrightTestCase):
 
 
 class ClientsRepoTestCase(PlaywrightTestCase):
+    """
+    Clase de caso de prueba para probar la funcionalidad del repositorio de clientes.
+
+    Esta clase incluye métodos de prueba para verificar si se muestra un mensaje si la tabla está vacía,
+    mostrar datos de clientes, mostrar la acción para agregar un cliente, mostrar la acción para editar un cliente
+    y mostrar la acción para eliminar un cliente.
+    
+    """
     def test_should_show_message_if_table_is_empty(self):
         self.page.goto(f"{self.live_server_url}{reverse('clients_repo')}")
 
@@ -167,6 +203,14 @@ class ClientsRepoTestCase(PlaywrightTestCase):
 
 
 class ClientCreateEditTestCase(PlaywrightTestCase):
+    """
+    Clase de caso de prueba para probar la creación y edición de clientes.
+
+    Esta clase incluye métodos de prueba para:
+    - Crear un nuevo cliente.
+    - Ver errores si el formulario es inválido.
+    - Editar un cliente existente.
+    """
     def test_should_be_able_to_create_a_new_client(self):
         self.page.goto(f"{self.live_server_url}{reverse('clients_form')}")
 
@@ -245,6 +289,16 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
         )
 
 class MedicineRepoTestCase(PlaywrightTestCase):
+    """
+    Clase de caso de prueba para probar la funcionalidad del repositorio de medicamentos.
+
+    Esta clase incluye métodos de prueba para:
+    - Verificar si se muestra un mensaje si la tabla está vacía.
+    - Mostrar datos de medicamentos.
+    - Mostrar la acción para agregar un medicamento.
+    - Mostrar la acción para editar un medicamento.
+    - Mostrar la acción para eliminar un medicamento.
+    """
     def test_should_show_message_if_table_is_empty(self):
         self.page.goto(f"{self.live_server_url}{reverse('meds_repo')}")
 
@@ -341,6 +395,15 @@ class MedicineRepoTestCase(PlaywrightTestCase):
         expect(self.page.get_by_text("Paracetamoldog")).not_to_be_visible()
 
 class productCreateEditTestCase(PlaywrightTestCase):
+    """
+    Clase de caso de prueba para probar la creación y edición de productos.
+
+    Esta clase incluye métodos de prueba para:
+    - Crear un nuevo producto.
+    - Aumentar el stock de un producto al hacer clic en un botón.
+    - Verificar si se muestra un error al intentar editar un producto con un stock negativo.
+    
+    """
     def test_should_be_able_to_create_a_new_product(self):
         self.page.goto(f"{self.live_server_url}{reverse('products_form')}")
 
@@ -406,6 +469,17 @@ class productCreateEditTestCase(PlaywrightTestCase):
         expect(self.page.get_by_text("El stock no puede ser negativo."))
 
 class PetCreateEditTestCase(PlaywrightTestCase):
+    """
+    Clase de caso de prueba para probar la creación y edición de mascotas.
+
+    Esta clase incluye métodos de prueba para:
+    - Verificar si se muestra un mensaje si la tabla está vacía.
+    - Crear una nueva mascota.
+    - Verificar si se muestran errores si el formulario de mascotas es inválido.
+    - Editar una mascota existente.
+    - Verificar si se muestra un error al intentar editar una mascota con una fecha de nacimiento futura.
+    
+    """
     def test_should_show_message_if_table_is_empty(self):
         self.page.goto(f"{self.live_server_url}{reverse('clients_repo')}")
         expect(self.page.get_by_text("No existen clientes")).to_be_visible()

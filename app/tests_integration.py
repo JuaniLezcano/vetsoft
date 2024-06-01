@@ -5,12 +5,39 @@ from datetime import date
 
 
 class HomePageTest(TestCase):
+    """
+    Clase de prueba para la vista de la página de inicio.
+
+    Esta clase contiene métodos de prueba para verificar el comportamiento
+    de la vista de la página de inicio.
+
+    Métodos de prueba:
+        test_use_home_template: Verifica si se está utilizando el template "home.html" en la vista de la página de inicio.
+
+    """
     def test_use_home_template(self):
         response = self.client.get(reverse("home"))
         self.assertTemplateUsed(response, "home.html")
 
 
 class ClientsTest(TestCase):
+    """
+    Clase de prueba para las vistas y funcionalidades relacionadas con los clientes.
+
+    Esta clase contiene métodos de prueba para verificar el comportamiento
+    de las vistas y funcionalidades relacionadas con los clientes.
+
+    Métodos de prueba:
+        test_repo_use_repo_template: Verifica si se está utilizando el template "clients/repository.html" en la vista del repositorio de clientes.
+        test_repo_display_all_clients: Verifica si se están mostrando todos los clientes en la vista del repositorio de clientes.
+        test_form_use_form_template: Verifica si se está utilizando el template "clients/form.html" en la vista del formulario de clientes.
+        test_can_create_client: Verifica si se puede crear un cliente correctamente.
+        test_validation_errors_create_client: Verifica si se muestran mensajes de error de validación al intentar crear un cliente sin proporcionar datos.
+        test_should_response_with_404_status_if_client_doesnt_exists: Verifica si se devuelve un código de estado 404 si se intenta acceder a la edición de un cliente que no existe.
+        test_validation_invalid_email: Verifica si se muestra un mensaje de error al intentar crear un cliente con un correo electrónico inválido.
+        test_edit_user_with_valid_data: Verifica si se puede editar un cliente existente con datos válidos.
+    
+    """
     def test_repo_use_repo_template(self):
         response = self.client.get(reverse("clients_repo"))
         self.assertTemplateUsed(response, "clients/repository.html")
@@ -96,6 +123,22 @@ class ClientsTest(TestCase):
         self.assertEqual(editedClient.email, client.email)
 
 class ProvidersTest(TestCase):
+    """
+    Clase de prueba para las vistas y funcionalidades relacionadas con los proveedores.
+
+    Esta clase contiene métodos de prueba para verificar el comportamiento
+    de las vistas y funcionalidades relacionadas con los proveedores.
+
+    Métodos de prueba:
+        test_can_create_client: Verifica si se puede crear un proveedor correctamente.
+        test_validation_invalid_email: Verifica si se muestra un mensaje de error al intentar crear un proveedor con un correo electrónico inválido.
+        test_validation_errors_create_provider: Verifica si se muestran mensajes de error de validación al intentar crear un proveedor sin proporcionar datos.
+        test_edit_user_with_valid_data: Verifica si se puede editar un proveedor existente con datos válidos.
+        test_repo_use_repo_template: Verifica si se está utilizando el template "providers/repository.html" en la vista del repositorio de proveedores.
+        test_repo_display_all_providers: Verifica si se están mostrando todos los proveedores en la vista del repositorio de proveedores.
+        test_form_use_form_template: Verifica si se está utilizando el template "providers/form.html" en la vista del formulario de proveedores.
+    
+    """
     def test_can_create_client(self):
         response = self.client.post(
             reverse("providers_form"),
@@ -178,6 +221,24 @@ class ProvidersTest(TestCase):
 
 
 class MedicinesTest(TestCase):
+    """
+    Clase de prueba para las vistas y funcionalidades relacionadas con los medicamentos.
+
+    Esta clase contiene métodos de prueba para verificar el comportamiento
+    de las vistas y funcionalidades relacionadas con los medicamentos.
+
+    Métodos de prueba:
+        test_repo_use_repo_template: Verifica si se está utilizando el template "meds/repository.html" en la vista del repositorio de medicamentos.
+        test_repo_display_all_medicines: Verifica si se están mostrando todos los medicamentos en la vista del repositorio de medicamentos.
+        test_form_use_form_template: Verifica si se está utilizando el template "meds/form.html" en la vista del formulario de medicamentos.
+        test_can_create_medicine: Verifica si se puede crear un medicamento correctamente.
+        test_validation_errors_create_medicine: Verifica si se muestran mensajes de error de validación al intentar crear un medicamento sin proporcionar datos.
+        test_should_response_with_404_status_if_medicine_doesnt_exists: Verifica si se devuelve un estado de 404 si se intenta acceder a la edición de un medicamento que no existe.
+        test_validation_invalid_dosis: Verifica si se muestra un mensaje de error al intentar crear un medicamento con una dosis inválida.
+        test_edit_user_with_valid_data: Verifica si se puede editar un medicamento existente con datos válidos.
+    
+    
+    """
     def test_repo_use_repo_template(self):
         response = self.client.get(reverse("meds_repo"))
         self.assertTemplateUsed(response, "meds/repository.html")
@@ -261,6 +322,19 @@ class MedicinesTest(TestCase):
 
 
 class ProductsTest(TestCase):
+    """
+    Clase de prueba para las vistas y funcionalidades relacionadas con los productos.
+
+    Esta clase contiene métodos de prueba para verificar el comportamiento
+    de las vistas y funcionalidades relacionadas con los productos.
+
+    Métodos de prueba:
+        test_can_create_product: Verifica si se puede crear un producto correctamente.
+        test_can_update_stock_product: Verifica si se puede actualizar el stock de un producto existente.
+        test_update_product_with_empty_stock: Verifica si se muestra un mensaje de error al intentar actualizar un producto con un stock vacío.
+        test_update_product_with_negative_stock: Verifica si se muestra un mensaje de error al intentar actualizar un producto con un stock negativo.
+
+    """
     def test_can_create_product(self):
         response = self.client.post(
             reverse("products_form"),
@@ -351,6 +425,24 @@ class ProductsTest(TestCase):
         self.assertEqual(editedProduct.stock, 50)
     
 class PetsTest(TestCase):
+    """
+    Clase de prueba para las vistas y funcionalidades relacionadas con las mascotas.
+
+    Esta clase contiene métodos de prueba para verificar el comportamiento
+    de las vistas y funcionalidades relacionadas con las mascotas.
+
+    Métodos de prueba:
+        test_repo_use_repo_template: Verifica si se utiliza la plantilla correcta para la vista de repositorio de mascotas.
+        test_form_use_form_template: Verifica si se utiliza la plantilla correcta para el formulario de mascotas.
+        test_can_create_pet: Verifica si se puede crear una mascota correctamente.
+        test_can_update_pet_breed: Verifica si se puede actualizar la raza de una mascota existente.
+        test_validation_errors_create_pet: Verifica si se muestran los mensajes de error correctamente al intentar crear una mascota sin completar todos los campos requeridos.
+        test_validation_error_create_pet_without_breed: Verifica si se muestra un mensaje de error al intentar crear una mascota sin especificar la raza.
+        test_should_response_with_404_status_if_pet_doesnt_exists: Verifica si se devuelve un estado 404 si se intenta editar una mascota que no existe.
+        test_validation_invalid_birthday: Verifica si se muestra un mensaje de error al intentar especificar una fecha de nacimiento futura para la mascota.
+        test_edit_user_with_valid_data: Verifica si se puede editar correctamente la información de una mascota.
+
+    """
     def test_repo_use_repo_template(self):
             response = self.client.get(reverse("pets_repo"))
             self.assertTemplateUsed(response, "pets/repository.html")

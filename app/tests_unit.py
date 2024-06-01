@@ -4,6 +4,18 @@ from datetime import date, timedelta
 
 
 class ClientModelTest(TestCase):
+    """
+    Clase de prueba para el modelo Client.
+
+    Esta clase contiene métodos de prueba para verificar la creación y actualización
+    de objetos de cliente en el modelo Client.
+
+    Métodos de prueba:
+        test_can_create_and_get_client: Verifica si se puede crear y obtener un cliente correctamente.
+        test_can_update_client: Verifica si se puede actualizar la información de un cliente correctamente.
+        test_update_client_with_error: Verifica si el cliente no se actualiza cuando se proporciona un valor de teléfono vacío.
+    
+    """
     def test_can_create_and_get_client(self):
         Client.save_client(
             {
@@ -60,6 +72,18 @@ class ClientModelTest(TestCase):
         self.assertEqual(client_updated.phone, "221555232")
 
 class ProviderModelTest(TestCase):
+    """
+    Clase de prueba para el modelo Provider.
+
+    Esta clase contiene métodos de prueba para verificar la creación y actualización
+    de objetos de proveedor en el modelo Provider.
+
+    Métodos de prueba:
+        test_can_create_and_get_provider: Verifica si se puede crear y obtener un proveedor correctamente.
+        test_can_update_provider: Verifica si se puede actualizar la información de un proveedor correctamente.
+        test_update_provider_with_error: Verifica si el proveedor no se actualiza cuando se proporciona una dirección vacía.
+    
+    """
     def test_can_create_and_get_provider(self):
         Provider.save_provider(
             {
@@ -115,6 +139,18 @@ class ProviderModelTest(TestCase):
 
 
 class MedicineModelTest(TestCase):
+    """
+    Clase de prueba para el modelo de Medicamento (Med).
+
+    Esta clase contiene métodos de prueba para verificar la creación y actualización
+    de objetos de medicamento en el modelo Med.
+
+    Métodos de prueba:
+        test_can_create_and_get_medicine: Verifica si se puede crear y obtener un medicamento correctamente.
+        test_can_update_medicine: Verifica si se puede actualizar la información de un medicamento correctamente.
+        test_update_medicine_with_error: Verifica si el medicamento no se actualiza cuando se proporciona una dosis vacía.
+    
+    """
     def test_can_create_and_get_medicine(self):
         Med.save_med(
             {
@@ -173,6 +209,20 @@ class MedicineModelTest(TestCase):
         self.assertEqual(medicine_updated.dose, 8)
 
 class ProductModelTest(TestCase):
+    """
+    Clase de prueba para el modelo de Producto (Product).
+
+    Esta clase contiene métodos de prueba para verificar la creación y actualización
+    de objetos de producto en el modelo Product.
+
+    Métodos de prueba:
+        test_can_create_and_get_product_with_stock: Verifica si se puede crear y obtener un producto con stock correctamente.
+        test_can_update_product_stock: Verifica si se puede actualizar el stock de un producto correctamente.
+        test_update_product_stock_with_error_negative_value: Verifica que el stock del producto no se actualice si se proporciona un valor negativo.
+        test_update_product_stock_with_error_string_value: Verifica que el stock del producto no se actualice si se proporciona un valor no numérico.
+        test_update_product_stock_with_error_empty_value: Verifica que el stock del producto no se actualice si se proporciona un valor vacío.
+    
+    """
     def test_can_create_and_get_product_with_stock(self):
         Product.save_product(
             {
@@ -251,6 +301,20 @@ class ProductModelTest(TestCase):
         self.assertEqual(product_updated.stock, 50)
 
 class PetModelTest(TestCase):
+    """
+    Clase de prueba para el modelo de Mascota (Pet).
+
+    Esta clase contiene métodos de prueba para verificar la creación y actualización
+    de objetos de mascota en el modelo Pet.
+
+    Métodos de prueba:
+        test_can_create_pet_with_breed_options: Verifica si se puede crear una mascota con opciones de raza válidas.
+        test_can_update_pet_breed: Verifica si se puede actualizar la raza de una mascota correctamente.
+        test_update_pet_with_error: Verifica que la raza de la mascota no se actualice si se proporciona un valor vacío.
+        test_cant_invalidate_birthday: Verifica que no se pueda crear una mascota con una fecha de nacimiento futura.
+
+   
+    """
     def test_can_create_pet_with_breed_options(self):
         pet_birthday = (date(2021, 1, 1)).strftime("%Y-%m-%d")
         Pet.save_pet(

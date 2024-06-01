@@ -110,6 +110,24 @@ def validate_med(data):
     return errors
 
 class Client(models.Model):
+    """
+    Modelo que representa a un cliente.
+
+    Este modelo contiene la información básica de un cliente, como su nombre, teléfono, correo electrónico
+    y dirección. También proporciona métodos para guardar y actualizar la información del cliente.
+
+    Atributos:
+        name (str): Nombre del cliente.
+        phone (str): Número de teléfono del cliente.
+        email (str): Dirección de correo electrónico del cliente.
+        address (str, opcional): Dirección del cliente (opcional).
+
+    Métodos:
+        __str__: Método para representar el objeto cliente como una cadena.
+        save_client: Método de clase para guardar un nuevo cliente en la base de datos.
+        update_client: Método para actualizar la información de un cliente existente en la base de datos.
+    
+    """
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=15)
     email = models.EmailField()
@@ -144,6 +162,24 @@ class Client(models.Model):
 
 
 class Product(models.Model):
+    """
+    Modelo que representa un producto en el inventario.
+
+    Este modelo contiene la información de un producto, incluyendo su nombre, tipo,
+    precio y stock disponible.
+
+    Atributos:
+        name (str): Nombre del producto.
+        type (str): Tipo o categoría del producto.
+        price (float): Precio del producto.
+        stock (int): Cantidad de stock disponible del producto.
+
+    Métodos:
+        __str__: Método para representar el objeto producto como una cadena.
+        save_product: Método de clase para guardar un nuevo producto en la base de datos.
+        update_product: Método para actualizar la información de un producto existente en la base de datos.
+    
+    """
     name = models.CharField(max_length=100)
     type = models.CharField(max_length=50)
     price = models.FloatField()
@@ -185,6 +221,23 @@ class Product(models.Model):
 
 
 class Provider(models.Model):
+    """
+    Modelo que representa un proveedor de productos.
+
+    Este modelo contiene la información de un proveedor, incluyendo su nombre,
+    dirección de correo electrónico y dirección física.
+
+    Atributos:
+        name (str): Nombre del proveedor.
+        email (str): Dirección de correo electrónico del proveedor.
+        address (str, opcional): Dirección física del proveedor (opcional).
+
+    Métodos:
+        __str__: Método para representar el objeto proveedor como una cadena.
+        save_provider: Método de clase para guardar un nuevo proveedor en la base de datos.
+        update_provider: Método para actualizar la información de un proveedor existente en la base de datos.
+    
+    """
     name = models.CharField(max_length=100)
     email = models.EmailField()
     address = models.CharField(max_length=100, blank=True)
@@ -216,6 +269,22 @@ class Provider(models.Model):
         self.save()
 
 class Veterinary(models.Model):
+    """
+    Modelo que representa una veterinario.
+
+    Este modelo contiene la información de una veterinario, incluyendo su nombre,
+    número de teléfono y dirección de correo electrónico.
+
+    Atributos:
+        name (str): Nombre del veterinario.
+        phone (str): Número de teléfono del veterinario.
+        email (str): Dirección de correo electrónico del veterinario.
+
+    Métodos:
+        __str__: Método para representar el objeto veterinario como una cadena.
+        save_veterinary: Método de clase para guardar un nuevo veterinario en la base de datos.
+        update_veterinary: Método para actualizar la información de un veterinario existente en la base de datos.
+    """
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=15)
     email = models.EmailField()
@@ -271,6 +340,21 @@ def validate_pet(data):
     return errors
 
 class Pet(models.Model):
+    """
+    Modelo que representa una mascota.
+
+    Este modelo contiene la información de una mascota, incluyendo su nombre, raza y fecha de nacimiento.
+
+    Atributos:
+        name (str): Nombre de la mascota.
+        breed (str): Raza de la mascota.
+        birthday (date): Fecha de nacimiento de la mascota.
+
+    Métodos:
+        __str__: Método para representar el objeto mascota como una cadena.
+        save_pet: Método de clase para guardar una nueva mascota en la base de datos.
+        update_pet: Método para actualizar la información de una mascota existente en la base de datos.
+    """
     class Breed(models.TextChoices):
         Perro = "Perro"
         Gato = "Gato"
@@ -309,6 +393,23 @@ class Pet(models.Model):
         self.save()
 
 class Med(models.Model):
+    """
+     Modelo que representa un medicamento.
+
+    Este modelo contiene la información de un medicamento, incluyendo su nombre, descripción y dosis.
+
+    Atributos:
+        name (str): Nombre del medicamento.
+        desc (str): Descripción del medicamento.
+        dose (float): Dosis del medicamento.
+
+    Métodos:
+        __str__: Método para representar el objeto medicamento como una cadena.
+        save_med: Método de clase para guardar un nuevo medicamento en la base de datos.
+        update_med: Método para actualizar la información de un medicamento existente en la base de datos.
+    
+    
+    """
     name = models.CharField(max_length=100)
     desc = models.CharField(max_length=50)
     dose = models.FloatField()
