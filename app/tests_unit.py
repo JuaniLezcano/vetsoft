@@ -59,19 +59,7 @@ class ClientModelTest(TestCase):
         client_updated = Client.objects.get(pk=1)
 
         self.assertEqual(client_updated.phone, "221555232")
-        
-<<<<<<< HEAD
-    def test_cant_update_client_with_characters_in_phone_input(self):
-        Client.save_client(
-            {
-                "name": "Benjamin Peres",
-                "phone": "2214504505",
-                "address": "1 y 60",
-                "email": "benjaminperes@hotmail.com",
-            }
-        )
-        client = Client.objects.get(pk=1)
-=======
+                
     def test_clients_delete(self):
         Client.save_client(
             {
@@ -86,9 +74,19 @@ class ClientModelTest(TestCase):
         response = self.client.post(reverse('clients_delete'), {'client_id': client.id})
         self.assertEqual(Client.objects.count(), initial_count - 1)
         self.assertRedirects(response, reverse('clients_repo'))
->>>>>>> main
 
-        client.update_client({"phone": "124asd"})
+    def test_cant_update_client_with_characters_in_phone_input(self):
+        Client.save_client(
+            {
+                "name": "Benjamin Peres",
+                "phone": "2214504505",
+                "address": "1 y 60",
+                "email": "benjaminperes@hotmail.com",
+            }
+        )
+        client = Client.objects.get(pk=1)
+
+        client.update_client({"phone": "123asd"})
         
         client_updated = Client.objects.get(pk=1)
 
