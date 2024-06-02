@@ -217,7 +217,7 @@ class MedicineModelTest(TestCase):
                 "name": "Paracetamoldog",
                 "desc": "Este medicamento es para vomitos caninos",
                 "dose": 18,
-            }
+            },
         )
         medicines = Med.objects.all()
         self.assertEqual(len(medicines), 0) #Si esto es así, significa que no guardó el medicamento porque tenía errores
@@ -228,7 +228,7 @@ class MedicineModelTest(TestCase):
                 "name": "Paracetamoldog",
                 "desc": "Este medicamento es para vomitos caninos",
                 "dose": 1,
-            }
+            },
         )
         medicine = Med.objects.get(pk=1)
         self.assertEqual(medicine.dose, 1)
