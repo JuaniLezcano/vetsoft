@@ -108,14 +108,35 @@ class MedicineModelTest(TestCase):
             }
         )
         medicine = Med.objects.get(pk=1)
-
         self.assertEqual(medicine.dose, 8)
-
         medicine.update_med({"dose": ""})
-
         medicine_updated = Med.objects.get(pk=1)
-
         self.assertEqual(medicine_updated.dose, 8)
+        
+    def test_can_create_with_invalid_dosis(self):
+        Med.save_med(
+            {
+                "name": "Paracetamoldog",
+                "desc": "Este medicamento es para vomitos caninos",
+                "dose": 18,
+            }
+        )
+        medicines = Med.objects.all()
+        self.assertEqual(len(medicines), 0) #Si esto es así, significa que no guardó el medicamento porque tenía errores
+
+    def test_can_update_invalid_medicine_dosis(self):
+        Med.save_med(
+            {
+                "name": "Paracetamoldog",
+                "desc": "Este medicamento es para vomitos caninos",
+                "dose": 1,
+            }
+        )
+        medicine = Med.objects.get(pk=1)
+        self.assertEqual(medicine.dose, 1)
+        medicine.update_med({"dose": 18})
+        medicine_updated = Med.objects.get(pk=1)
+        self.assertEqual(medicine_updated.dose, 1)
 
 class ProductModelTest(TestCase):
     def test_can_create_and_get_product_with_stock(self):
