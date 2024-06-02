@@ -339,6 +339,21 @@ class MedicineRepoTestCase(PlaywrightTestCase):
         self.assertTrue(response.status < 400)
 
         expect(self.page.get_by_text("Paracetamoldog")).not_to_be_visible()
+        
+
+    def test_should_validate_medicine_dose(self):
+        self.page.goto(f"{self.live_server_url}{reverse('meds_form')}")
+
+        expect(self.page.get_by_role("form")).to_be_visible()
+
+        # Probar con una dosis menor a 1
+        self.page.get_by_label("Nombre").fill("Paracetamoldog")
+        self.page.get_by_label("Descripcion").fill("Este medicamento es para vomitos caninos")
+        self.page.get_by_label("Dosis").fill("0")
+        self.page.get_by_role("button", name="Guardar").click()
+
+        expect(self.page.get_by_text("La dosis debe estar entre 1 y 10")).to_be_visible()
+
 
 class productCreateEditTestCase(PlaywrightTestCase):
     def test_should_be_able_to_create_a_new_product(self):
