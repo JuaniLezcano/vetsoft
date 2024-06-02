@@ -177,8 +177,8 @@ class ProvidersTest(TestCase):
             data={
                 "name":"Farmacity S.A",
                 "email":"moltito@hotmail.com",
-                "address":""
-            }
+                "address":"",
+            },
         )
         self.assertContains(response, "Por favor ingrese una direccion")
 
