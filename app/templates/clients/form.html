@@ -10,7 +10,7 @@
 
     <div class="row">
         <div class="col-lg-6 offset-lg-3">
-            <form class="vstack gap-3 {% if errors %}was-validated{% endif %}"
+            <form class="vstack gap-3"
                 aria-label="Formulario de creacion de cliente"
                 method="POST"
                 action="{% url 'clients_form' %}"
@@ -26,7 +26,7 @@
                         id="name"
                         name="name"
                         value="{{client.name}}"
-                        class="form-control"
+                        class="form-control {% if errors.name %}is-invalid{% endif %}"
                         required/>
 
                     {% if errors.name %}
@@ -55,7 +55,7 @@
                     <input type="email"
                         id="email"
                         name="email"
-                        class="form-control"
+                        class="form-control {% if errors.email %}is-invalid{% endif %}"
                         value="{{ client.email }}"
                         required/>
 
@@ -71,7 +71,7 @@
                         id="address"
                         name="address"
                         value="{{client.address}}"
-                        class="form-control" />
+                        class="form-control {% if errors.address %}is-invalid{% endif %}" />
 
                     <div class="invalid-feedback">
                         La dirrección es opcional
