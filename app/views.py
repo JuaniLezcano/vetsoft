@@ -17,12 +17,18 @@ def clients_form(request, id=None):
         client_id = request.POST.get("id", "")
         errors = {}
         saved = True
+        phone = request.POST.get("phone")
 
         if client_id == "":
             saved, errors = Client.save_client(request.POST)
         else:
             client = get_object_or_404(Client, pk=client_id)
             client.update_client(request.POST)
+
+        if not phone.startswith("54"):
+            saved = False
+            errors["phone"] = "El telefono debe comenzar con '54'"
+            
 
         if saved:
             return redirect(reverse("clients_repo"))
