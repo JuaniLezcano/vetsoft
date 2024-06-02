@@ -1,19 +1,7 @@
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from .models import Client, Product , Med, Provider, Veterinary, Pet
 from django.contrib import messages
-
-def decrement_stock(request, id):
-    product = get_object_or_404(Product, pk=id)
-
-    if product.stock > 0:
-        product.stock -= 1
-        product.save()
-    else:
-        # Si el stock es 0, muestra un mensaje de error
-        messages.error(request, f'El stock del producto "{product.name}" ya es 0 y no puede ser decrementado más.')
-
-    return redirect('products_repo')
-
+from datetime import date, datetime
 
 def home(request):
     return render(request, "home.html")
@@ -40,7 +28,7 @@ def clients_form(request, id=None):
             return redirect(reverse("clients_repo"))
 
         return render(
-            request, "clients/form.html", {"errors": errors, "client": request.POST}
+            request, "clients/form.html", {"errors": errors, "client": request.POST},
         )
 
     client = None
@@ -69,18 +57,27 @@ def pets_form(request, id=None):
         pet_id = request.POST.get("id", "")
         errors = {}
         saved = True
+        birthday = request.POST.get("birthday")
 
         if pet_id == "":
             saved, errors = Pet.save_pet(request.POST)
         else:
             pet = get_object_or_404(Pet, pk=pet_id)
             pet.update_pet(request.POST)
+        if birthday:
+            try:
+                birthday_format = datetime.strptime(birthday, "%Y-%m-%d").date()
+                if (birthday_format > date.today()):
+                    saved = False
+                    errors["birthday"] = "La fecha de nacimiento no puede ser posterior al día actual."
+            except ValueError:
+                errors["birthday"] = "Formato de fecha invalido. Utilice el formato YYYY-MM-DD"
 
         if saved:
             return redirect(reverse("pets_repo"))
 
         return render(
-            request, "pets/form.html", {"errors": errors, "pet": request.POST, "breeds": breeds}
+            request, "pets/form.html", {"errors": errors, "pet": request.POST, "breeds": breeds},
         )
 
     pet = None
@@ -88,7 +85,6 @@ def pets_form(request, id=None):
         pet = get_object_or_404(Pet, pk=id)
 
     return render(request, "pets/form.html", {"pet": pet, "breeds": breeds})
-
 
 def pets_delete(request):
     pet_id = request.POST.get("pet_id")
@@ -115,10 +111,13 @@ def products_form(request, id=None):
 
         try:
             int(stock)
-        except Exception as e:
-            errors["stock"] = "El campo de stock no puede estar vacio."
+        except Exception:
+            if (product_id == ""):
+                saved, errors = Product.save_product(request.POST)
+            else:
+                errors["stock"] = "El campo de stock no puede estar vacio."
             return render(
-            request, "products/form.html", {"errors": errors, "product": request.POST}
+            request, "products/form.html", {"errors": errors, "product": request.POST},
             )
         
         if (product_id == "" and int(stock) >= 0):
@@ -135,7 +134,7 @@ def products_form(request, id=None):
             return redirect(reverse("products_repo"))
 
         return render(
-            request, "products/form.html", {"errors": errors, "product": request.POST}
+            request, "products/form.html", {"errors": errors, "product": request.POST},
         )
 
     product = None
@@ -193,7 +192,7 @@ def providers_form(request, id=None):
             return redirect(reverse("providers_repo"))
 
         return render(
-            request, "providers/form.html", {"errors": errors, "provider": request.POST}
+            request, "providers/form.html", {"errors": errors, "provider": request.POST},
         )
 
     provider = None
@@ -230,7 +229,7 @@ def veterinary_form(request, id=None):
             return redirect(reverse("veterinary_repo"))
 
         return render(
-            request, "veterinary/form.html", {"errors": errors, "veterinary": request.POST}
+            request, "veterinary/form.html", {"errors": errors, "veterinary": request.POST},
         )
 
     veterinary = None

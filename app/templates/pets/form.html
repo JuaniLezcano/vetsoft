@@ -62,7 +62,8 @@
                         name="birthday"
                         class="form-control"
                         value="{{ pet.birthday }}"
-                        required/>
+                        required
+                        max="{% now "Y-m-d" %}" />
 
                     {% if errors.birthday %}
                         <div class="invalid-feedback">

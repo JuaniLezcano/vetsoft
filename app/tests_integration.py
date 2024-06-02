@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.shortcuts import reverse
-from app.models import Client, Product, Pet, Med
-from datetime import date, timedelta
+from app.models import Client, Product, Pet, Med, Provider, Veterinary
+from datetime import date
 
 
 class HomePageTest(TestCase):
@@ -95,6 +95,87 @@ class ClientsTest(TestCase):
         self.assertEqual(editedClient.address, client.address)
         self.assertEqual(editedClient.email, client.email)
 
+class ProvidersTest(TestCase):
+    def test_can_create_client(self):
+        response = self.client.post(
+            reverse("providers_form"),
+            data={
+                "name": "Farmacity S.A",
+                "email": "moltito@hotmail.com",
+                "address": "Rio negro 2265",
+            },
+        )
+        providers = Provider.objects.all()
+        self.assertEqual(len(providers), 1)
+
+        self.assertEqual(providers[0].name, "Farmacity S.A")
+        self.assertEqual(providers[0].email, "moltito@hotmail.com")
+        self.assertEqual(providers[0].address, "Rio negro 2265")
+
+
+        self.assertRedirects(response, reverse("providers_repo"))
+    def test_validation_invalid_email(self):
+        response = self.client.post(
+            reverse("providers_form"),
+            data={
+                "name": "Farmacity S.A",
+                "email": "facultad121030",
+                "address": "Rio negro 2265",
+            },
+        )
+
+        self.assertContains(response, "Por favor ingrese un email valido")        
+    def test_validation_errors_create_provider(self):
+        response = self.client.post(
+            reverse("providers_form"),
+            data={},
+        )
+
+        self.assertContains(response, "Por favor ingrese un nombre")
+        self.assertContains(response, "Por favor ingrese un email")
+        self.assertContains(response, "Por favor ingrese una direccion")
+    def test_edit_user_with_valid_data(self):
+        provider = Provider.objects.create(
+            name="Farmacity S.A",
+            email="moltito@hotmail.com",
+            address="Rio negro 2265",
+      )
+
+        response = self.client.post(
+            reverse("providers_form"),
+            data={
+                "id": provider.id,
+                "name": "SuperFarm",
+                "email": "moltito@hotmail.com",
+                "address": "Rio negro 2265",
+            },
+        )
+
+        # redirect after post
+        self.assertEqual(response.status_code, 302)
+
+        editedProvider = Provider.objects.get(pk=provider.id)
+        self.assertEqual(editedProvider.name, "SuperFarm")
+        self.assertEqual(editedProvider.email, provider.email)
+        self.assertEqual(editedProvider.address, provider.address)
+
+    def test_repo_use_repo_template(self):
+        response = self.client.get(reverse("providers_repo"))
+        self.assertTemplateUsed(response, "providers/repository.html")
+
+    def test_repo_display_all_providers(self):
+        response = self.client.get(reverse("providers_repo"))
+        self.assertTemplateUsed(response, "providers/repository.html")
+
+    def test_form_use_form_template(self):
+        response = self.client.get(reverse("providers_form"))
+        self.assertTemplateUsed(response, "providers/form.html")
+        
+
+    
+
+    
+
 
 class MedicinesTest(TestCase):
     def test_repo_use_repo_template(self):
@@ -180,6 +261,16 @@ class MedicinesTest(TestCase):
 
 
 class ProductsTest(TestCase):
+    def test_validation_errors_create_product(self):
+        response = self.client.post(
+            reverse("products_form"),
+            data={},
+        )
+        self.assertContains(response, "Por favor ingrese un nombre")
+        self.assertContains(response, "Por favor ingrese un tipo")
+        self.assertContains(response, "Por favor ingrese un precio")
+        self.assertContains(response, "Por favor ingrese un stock")
+        
     def test_can_create_product(self):
         response = self.client.post(
             reverse("products_form"),
@@ -340,3 +431,80 @@ class PetsTest(TestCase):
         )
 
         self.assertContains(response, "Por favor ingrese una raza")
+
+    def test_should_response_with_404_status_if_pet_doesnt_exists(self):
+        response = self.client.get(reverse("pets_edit", kwargs={"id": 100}))
+        self.assertEqual(response.status_code, 404)    
+
+    def test_validation_invalid_birthday(self):
+        response = self.client.post(
+        reverse("pets_form"),
+        data={
+            "name": "Paco",
+            "breed": "Caniche",
+            "birthday": "2028-05-20",
+        },
+    )
+
+        self.assertContains(response, "La fecha de nacimiento no puede ser posterior al día actual.")
+
+    def test_edit_user_with_valid_data(self):
+        pet = Pet.objects.create(
+            name="Paco",
+            breed="Caniche",
+            birthday="2015-05-20",
+        )
+
+        response = self.client.post(
+            reverse("pets_form"),
+            data={
+                "id": pet.id,
+                "name": "Maguile",
+                "breed": "Caniche",
+                "birthday": "2015-05-20",
+            },
+        )
+
+
+        self.assertEqual(response.status_code, 302)
+
+        editedPet = Pet.objects.get(pk=pet.id)
+        self.assertEqual(editedPet.name, "Maguile")
+        self.assertEqual(editedPet.breed, pet.breed)
+        self.assertEqual(str(editedPet.birthday), "2015-05-20")
+        
+    def test_invalid_birthday_format(self):
+        response = self.client.post(
+            reverse("pets_form"),
+            data={"birthday": "2022-13-32"},
+        )
+        self.assertContains(response, "Formato de fecha invalido. Utilice el formato YYYY-MM-DD")
+        
+class VetsTest(TestCase):
+    def test_validation_errors_create_vet(self):
+        response = self.client.post(
+            reverse("veterinary_form"),
+            data={},
+        )
+
+        self.assertContains(response, "Por favor ingrese un nombre")
+        self.assertContains(response, "Por favor ingrese un teléfono")
+        self.assertContains(response, "Por favor ingrese un email")
+        
+    def test_can_create_vet(self):
+        response = self.client.post(
+            reverse("veterinary_form"),
+            data={
+                "name": "Jose Rodriguez",
+                "phone": "2214504505",
+                "email": "joser@hotmail.com",
+            },
+        )
+        veterinaries = Veterinary.objects.all()
+        self.assertEqual(len(veterinaries), 1)
+
+        self.assertEqual(veterinaries[0].name, "Jose Rodriguez")
+        self.assertEqual(veterinaries[0].phone, "2214504505")
+        self.assertEqual(veterinaries[0].email, "joser@hotmail.com")
+
+        self.assertRedirects(response, reverse("veterinary_repo"))

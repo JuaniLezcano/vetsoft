@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime, date
 
 def validate_client(data):
     errors = {}
@@ -25,9 +26,13 @@ def validate_provider(data):
 
     name = data.get("name", "")
     email = data.get("email", "")
+    address = data.get("address","")
 
     if name == "":
         errors["name"] = "Por favor ingrese un nombre"
+
+    if address == "":
+        errors["address"] = "Por favor ingrese una direccion"
 
     if email == "":
         errors["email"] = "Por favor ingrese un email"
@@ -172,8 +177,7 @@ class Product(models.Model):
         try:
             if (int(self.stock) < 0):
                 raise ValueError("El stock no puede ser negativo.")
-        except ValueError as e:
-            print(f"El stock no puede ser negativo: {e}")
+        except ValueError:
             self.stock = Product.objects.get(pk=self.pk).stock
 
         self.save()
@@ -183,6 +187,7 @@ class Product(models.Model):
 class Provider(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
+    address = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
         return self.name
@@ -197,6 +202,7 @@ class Provider(models.Model):
         Provider.objects.create(
             name=provider_data.get("name"),
             email=provider_data.get("email"),
+            address=provider_data.get("address"),
         )
 
         return True, None
@@ -204,6 +210,7 @@ class Provider(models.Model):
     def update_provider(self, provider_data):
         self.name = provider_data.get("name", "") or self.name
         self.email = provider_data.get("email", "") or self.email
+        self.address = provider_data.get("address","") or self.address
 
 
         self.save()
@@ -253,11 +260,15 @@ def validate_pet(data):
 
     if birthday == "":
         errors["birthday"] = "Por favor ingrese una fecha de nacimiento"
-    elif birthday.count("/") == 2:
-        errors["birthday"] = "Por favor ingrese una fecha valida"
+    else:
+        try:
+            birthday_date = datetime.strptime(birthday, "%Y-%m-%d").date()
+            if birthday_date > date.today():
+                errors["birthday"] = "La fecha de nacimiento no puede ser posterior al día actual."
+        except ValueError:
+            errors["birthday"] = "Formato de fecha inválido. Use AAAA-MM-DD."
 
     return errors
-
 
 class Pet(models.Model):
     class Breed(models.TextChoices):
@@ -279,7 +290,7 @@ class Pet(models.Model):
     def save_pet(cls, pet_data):
         errors = validate_pet(pet_data)
 
-        if len(errors.keys()) > 0:
+        if errors:
             return False, errors
 
         Pet.objects.create(
@@ -296,7 +307,6 @@ class Pet(models.Model):
         self.birthday = pet_data.get("birthday", "") or self.birthday
 
         self.save()
-
 
 class Med(models.Model):
     name = models.CharField(max_length=100)
