@@ -40,10 +40,12 @@
                     <input type="text"
                         id="phone"
                         name="phone"
-                        class="form-control {% if errors.phone %}is-invalid{% endif %}"
+                        type="tel"
+                        class="form-control"
                         value="{{ veterinary.phone|default_if_none:'' }}"
-                        required/>
-
+                        required
+                        pattern="54\d{11}"/>
+            
                     {% if errors.phone %}
                         <div class="invalid-feedback">
                             {{ errors.phone }}
@@ -58,7 +60,7 @@
                         class="form-control"
                         value="{{ veterinary.email }}"
                         required/>
-
+            
                     {% if errors.email %}
                         <div class="invalid-feedback">
                             {{ errors.email }}
