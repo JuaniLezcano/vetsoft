@@ -116,7 +116,7 @@ class ClientsTest(TestCase):
                 email= "benjaminperes@hotmail.com",
         )
 
-        response = self.client.post(
+        self.client.post(
             reverse("clients_form"),
             data={
                 "id": client.id,

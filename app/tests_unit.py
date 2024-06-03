@@ -82,7 +82,7 @@ class ClientModelTest(TestCase):
                 "phone": "2214504505",
                 "address": "1 y 60",
                 "email": "benjaminperes@hotmail.com",
-            }
+            },
         )
         client = Client.objects.get(pk=1)
 
@@ -99,7 +99,7 @@ class ClientModelTest(TestCase):
                 "phone": "221asd",
                 "address": "1 y 60",
                 "email": "benjaminperes@hotmail.com",
-            }
+            },
         )
         clients = Client.objects.all()
         self.assertEqual(len(clients), 0)
