@@ -59,7 +59,7 @@ class ClientModelTest(TestCase):
         client_updated = Client.objects.get(pk=1)
 
         self.assertEqual(client_updated.phone, "221555232")
-        
+
     def test_clients_delete(self):
         Client.save_client(
             {
@@ -105,7 +105,7 @@ class ProviderModelTest(TestCase):
         response = self.client.post(reverse('providers_delete'), {'provider_id': provider.id})
         self.assertEqual(Provider.objects.count(), initial_count - 1)
         self.assertRedirects(response, reverse('providers_repo'))
-        
+
     def test_can_update_provider(self):
         Provider.save_provider(
             {
@@ -247,7 +247,7 @@ class ProductModelTest(TestCase):
         product.update_product({"stock":"75"})
         product_updated = Product.objects.get(pk=1)
         self.assertEqual(product_updated.stock, 75)
-        
+
     def test_product_delete(self):
         Product.save_product(
             {
@@ -262,7 +262,7 @@ class ProductModelTest(TestCase):
         response = self.client.post(reverse('products_delete'), {'product_id': product.id})
         self.assertEqual(Product.objects.count(), initial_count - 1)
         self.assertRedirects(response, reverse('products_repo'))
-        
+
     def test_update_product_stock_with_error_negative_value(self):
         Product.save_product(
             {
@@ -277,7 +277,7 @@ class ProductModelTest(TestCase):
         product.update_product({"stock":"-75"})
         product_updated = Product.objects.get(pk=1)
         self.assertEqual(product_updated.stock, 50)
-        
+
     def test_update_product_stock_with_error_string_value(self):
         Product.save_product(
             {
@@ -292,7 +292,7 @@ class ProductModelTest(TestCase):
         product.update_product({"stock":"asd"})
         product_updated = Product.objects.get(pk=1)
         self.assertEqual(product_updated.stock, 50)
-    
+
     def test_update_product_stock_with_error_empty_value(self):
         Product.save_product(
             {
@@ -307,7 +307,7 @@ class ProductModelTest(TestCase):
         product.update_product({"stock":""})
         product_updated = Product.objects.get(pk=1)
         self.assertEqual(product_updated.stock, 50)
-    
+
     def test_increment_stock(self):
         Product.save_product(
             {
@@ -339,7 +339,7 @@ class ProductModelTest(TestCase):
         product.refresh_from_db()
         self.assertEqual(product.stock, initial_stock - 1)
         self.assertRedirects(response, reverse('products_repo'))
-    
+
     def test_decrement_stock_zero(self):
         Product.save_product(
             {
@@ -419,7 +419,7 @@ class PetModelTest(TestCase):
         pet.update_pet({"breed": ""})
         pet_updated = Pet.objects.get(pk=1)
         self.assertEqual(pet_updated.breed, "Perro")
-    
+
     def test_cant_invalidate_birthday(self):
         future_birthday = (date.today() + timedelta(days=1)).strftime("%Y-%m-%d")
         pet_data = {
@@ -430,9 +430,9 @@ class PetModelTest(TestCase):
         errors = validate_pet(pet_data)
         self.assertIn("birthday", errors)
         self.assertEqual(errors["birthday"], "La fecha de nacimiento no puede ser posterior al día actual.")
-    
 
-    
+
+
 class VeterinaryModelTest(TestCase):
     def test_can_create_and_get_vet(self):
         Veterinary.save_veterinary(
@@ -448,7 +448,7 @@ class VeterinaryModelTest(TestCase):
         self.assertEqual(veterinaries[0].name, "Jose Rodriguez")
         self.assertEqual(veterinaries[0].phone, "2214504505")
         self.assertEqual(veterinaries[0].email, "joser@hotmail.com")
-        
+
     def test_vet_delete(self):
         Veterinary.save_veterinary(
             {
@@ -462,7 +462,7 @@ class VeterinaryModelTest(TestCase):
         response = self.client.post(reverse('veterinary_delete'), {'veterinary_id': veterinary.id})
         self.assertEqual(Veterinary.objects.count(), initial_count - 1)
         self.assertRedirects(response, reverse('veterinary_repo'))
-        
+
     def test_validate_veterinary_empty_data(self):
         data = {}
         errors = validate_veterinary(data)
@@ -472,7 +472,7 @@ class VeterinaryModelTest(TestCase):
             "email": "Por favor ingrese un email",
         }
         self.assertDictEqual(expected_errors, errors)
-        
+
     def test_validate_wrong_email(self):
         data = {"name": "Jose Rodriguez",
                 "phone": "2214504505",
@@ -482,7 +482,7 @@ class VeterinaryModelTest(TestCase):
             "email": "Por favor ingrese un email valido",
         }
         self.assertDictEqual(expected_errors, errors)
-        
+
     def test_cant_update_veterinary_with_error(self):
         Veterinary.save_veterinary(
             {
