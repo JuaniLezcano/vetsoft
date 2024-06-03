@@ -266,8 +266,8 @@ def validate_pet(data):
             if birthday_date > date.today():
                 errors["birthday"] = "La fecha de nacimiento no puede ser posterior al día actual."
         except ValueError:
-            errors["birthday"] = "Formato de fecha inválido. Use AAAA-MM-DD."
-
+            errors["birthday"] = "Formato de fecha invalido. Utilice el formato YYYY-MM-DD"
+            
     return errors
 
 class Pet(models.Model):
@@ -302,14 +302,28 @@ class Pet(models.Model):
         return True, None
 
     def update_pet(self, pet_data):
-        errors = validate_pet(pet_data)
-        if errors:
-            return False, errors
-
-        # Cambiado para usar valores predeterminados si no se proporcionan
+        errors = {}
         self.name = pet_data.get("name", self.name)
         self.breed = pet_data.get("breed", self.breed)
-        self.birthday = pet_data.get("birthday", self.birthday)
+
+        birthday_str = pet_data.get("birthday", None)
+        
+        if birthday_str:
+            try:
+                birthday_date = datetime.strptime(birthday_str, "%Y-%m-%d").date()
+                if birthday_date > date.today():
+                    errors["birthday"] = "La fecha de nacimiento no puede ser posterior al día actual."
+                    self.birthday = Pet.objects.get(pk=self.pk).birthday
+                    return False, errors
+                self.birthday = birthday_date
+            except ValueError:
+                errors["birthday"] = "Formato de fecha inválido. Utilice AAAA-MM-DD."
+                self.birthday = Pet.objects.get(pk=self.pk).birthday
+                return False, errors
+
+        # No se realizan cambios en la mascota si no hay datos válidos proporcionados
+        if not (pet_data.get("name") or pet_data.get("breed") or pet_data.get("birthday")):
+            return True, None
 
         self.save()
         return True, None
