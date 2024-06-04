@@ -27,10 +27,10 @@ def clients_form(request, id=None):
         if email:
             try:
                 if not email.endswith("@vetsoft.com"):
-                    errors["email"] = "El email debe terminar en 'vetsoft.com.'"
+                    errors["email"] = "Por favor ingrese un email valido'"
                     saved = False
             except ValueError:
-                errors["email"] = "Formato de email inválido."
+                errors["email"] = "Por favor ingrese un email valido"
 
 
         if saved:
