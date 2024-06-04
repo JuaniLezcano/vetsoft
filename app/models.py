@@ -18,6 +18,8 @@ def validate_client(data):
         errors["email"] = "Por favor ingrese un email"
     elif email.count("@") == 0:
         errors["email"] = "Por favor ingrese un email valido"
+    elif email.count("@vetsoft.com") == 0:
+        errors["email"] = "Por favor ingrese un email de vetsoft.com"
 
     return errors
 
@@ -136,7 +138,8 @@ class Client(models.Model):
 
     def update_client(self, client_data):
         self.name = client_data.get("name", "") or self.name
-        self.email = client_data.get("email", "") or self.email
+        if (client_data.get("email", "").count("@vetsoft.com") == 1):
+            self.email = client_data.get("email", "") or self.email
         self.phone = client_data.get("phone", "") or self.phone
         self.address = client_data.get("address", "") or self.address
 
