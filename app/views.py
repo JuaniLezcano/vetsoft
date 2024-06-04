@@ -27,6 +27,7 @@ def clients_form(request, id=None):
 
         if phone:
             try:
+                int (phone)
                 if not phone.startswith("54"):
                     saved=False
                     errors["phone"] = "El telefono debe comenzar con '54'"
@@ -227,21 +228,12 @@ def veterinary_form(request, id=None):
         veterinary_id = request.POST.get("id", "")
         errors = {}
         saved = True
-        phone = request.POST.get("phone", "")
 
         if veterinary_id == "":
             saved, errors = Veterinary.save_veterinary(request.POST)
         else:
             veterinary = get_object_or_404(Veterinary, pk=veterinary_id)
             veterinary.update_veterinary(request.POST)
-        
-        if phone:
-            try:
-                if not phone.startswith("54"):
-                    saved=False
-                    errors["phone"] = "El telefono debe comenzar con '54'"
-            except ValueError:
-                errors["phone"] = "Formato de Telefono invalido"
 
         if saved:
             return redirect(reverse("veterinary_repo"))

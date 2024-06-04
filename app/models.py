@@ -15,6 +15,7 @@ def validate_client(data):
         errors["phone"] = "Por favor ingrese un teléfono"
     else:
         try:
+            int (phone)
             if not phone.startswith("54"):
                 errors["phone"] = "El telefono debe comenzar con '54'"
         except ValueError:
@@ -80,12 +81,6 @@ def validate_veterinary(data):
 
     if phone == "":
         errors["phone"] = "Por favor ingrese un teléfono"
-    else:
-        try:
-            if not phone.startswith("54"):
-                errors["phone"] = "El telefono debe comenzar con '54'"
-        except ValueError:
-            errors["phone"] = "Formato de telefono invalido"
 
     if email == "":
         errors["email"] = "Por favor ingrese un email"
@@ -155,6 +150,7 @@ class Client(models.Model):
         phone = client_data.get("phone", "")
         if phone:
             try:
+                int (phone)
                 if not phone.startswith("54"):
                     errors["phone"] = "El telefono debe comenzar con '54'"
                     self.phone = Client.objects.get(pk=self.pk).phone
@@ -268,28 +264,11 @@ class Veterinary(models.Model):
         return True, None
 
     def update_veterinary(self, veterinary_data):
-        errors = {}
         self.name = veterinary_data.get("name", "") or self.name
         self.email = veterinary_data.get("email", "") or self.email
-
-        phone = veterinary_data.get("phone", "")
-        if phone:
-            try:
-                if not phone.startswith("54"):
-                    errors["phone"] = "El telefono debe comenzar con '54'"
-                    self.phone = Veterinary.objects.get(pk=self.pk).phone
-                    return False, errors
-                self.phone = phone
-            except ValueError:
-                errors["phone"] = "Formato de Telefono invalido"
-                self.phone = Veterinary.objects.get(pk=self.pk).phone
-                return False, errors
-
-        if not (veterinary_data.get("name") or veterinary_data.get("email") or veterinary_data.get("phone")):
-            return True, None
+        self.phone = veterinary_data.get("phone", "") or self.phone
 
         self.save()
-        return True, None
 
 def validate_pet(data):
     errors = {}
