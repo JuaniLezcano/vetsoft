@@ -558,7 +558,7 @@ class ProviderCreateEditTestCase(PlaywrightTestCase):
         self.page.get_by_role("button", name="Guardar").click()
         expect(self.page.get_by_text("Por favor ingrese una direccion")).not_to_be_visible() 
 
-    def test_should_be_able_to_edit_a_client(self):
+    def test_should_be_able_to_edit_a_provider(self):
         provider = Provider.objects.create(
             name="Farmacity S.A",
             email="moltito@hotmail.com",
