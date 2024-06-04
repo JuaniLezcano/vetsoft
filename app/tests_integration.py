@@ -28,7 +28,7 @@ class ClientsTest(TestCase):
             reverse("clients_form"),
             data={
                 "name": "Juan Sebastian Veron",
-                "phone": "221555232",
+                "phone": "541555232",
                 "address": "13 y 44",
                 "email": "brujita75@hotmail.com",
             },
@@ -37,7 +37,7 @@ class ClientsTest(TestCase):
         self.assertEqual(len(clients), 1)
 
         self.assertEqual(clients[0].name, "Juan Sebastian Veron")
-        self.assertEqual(clients[0].phone, "221555232")
+        self.assertEqual(clients[0].phone, "541555232")
         self.assertEqual(clients[0].address, "13 y 44")
         self.assertEqual(clients[0].email, "brujita75@hotmail.com")
 
@@ -62,7 +62,7 @@ class ClientsTest(TestCase):
             reverse("clients_form"),
             data={
                 "name": "Juan Sebastian Veron",
-                "phone": "221555232",
+                "phone": "541555232",
                 "address": "13 y 44",
                 "email": "brujita75",
             },
@@ -74,7 +74,7 @@ class ClientsTest(TestCase):
         client = Client.objects.create(
             name="Juan Sebastián Veron",
             address="13 y 44",
-            phone="221555232",
+            phone="541555232",
             email="brujita75@hotmail.com",
         )
 
@@ -496,7 +496,7 @@ class VetsTest(TestCase):
             reverse("veterinary_form"),
             data={
                 "name": "Jose Rodriguez",
-                "phone": "2214504505",
+                "phone": "5414504505",
                 "email": "joser@hotmail.com",
             },
         )
@@ -504,7 +504,7 @@ class VetsTest(TestCase):
         self.assertEqual(len(veterinaries), 1)
 
         self.assertEqual(veterinaries[0].name, "Jose Rodriguez")
-        self.assertEqual(veterinaries[0].phone, "2214504505")
+        self.assertEqual(veterinaries[0].phone, "5414504505")
         self.assertEqual(veterinaries[0].email, "joser@hotmail.com")
 
         self.assertRedirects(response, reverse("veterinary_repo"))

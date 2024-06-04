@@ -9,7 +9,7 @@ class ClientModelTest(TestCase):
         Client.save_client(
             {
                 "name": "Juan Sebastian Veron",
-                "phone": "221555232",
+                "phone": "541555232",
                 "address": "13 y 44",
                 "email": "brujita75@hotmail.com",
             },
@@ -18,7 +18,7 @@ class ClientModelTest(TestCase):
         self.assertEqual(len(clients), 1)
 
         self.assertEqual(clients[0].name, "Juan Sebastian Veron")
-        self.assertEqual(clients[0].phone, "221555232")
+        self.assertEqual(clients[0].phone, "541555232")
         self.assertEqual(clients[0].address, "13 y 44")
         self.assertEqual(clients[0].email, "brujita75@hotmail.com")
 
@@ -26,45 +26,45 @@ class ClientModelTest(TestCase):
         Client.save_client(
             {
                 "name": "Juan Sebastian Veron",
-                "phone": "221555232",
+                "phone": "541555232",
                 "address": "13 y 44",
                 "email": "brujita75@hotmail.com",
             },
         )
         client = Client.objects.get(pk=1)
 
-        self.assertEqual(client.phone, "221555232")
+        self.assertEqual(client.phone, "541555232")
 
-        client.update_client({"phone": "221555233"})
+        client.update_client({"phone": "541555233"})
 
         client_updated = Client.objects.get(pk=1)
 
-        self.assertEqual(client_updated.phone, "221555233")
+        self.assertEqual(client_updated.phone, "541555233")
 
     def test_update_client_with_error(self):
         Client.save_client(
             {
                 "name": "Juan Sebastian Veron",
-                "phone": "221555232",
+                "phone": "541555232",
                 "address": "13 y 44",
                 "email": "brujita75@hotmail.com",
             },
         )
         client = Client.objects.get(pk=1)
 
-        self.assertEqual(client.phone, "221555232")
+        self.assertEqual(client.phone, "541555232")
 
         client.update_client({"phone": ""})
 
         client_updated = Client.objects.get(pk=1)
 
-        self.assertEqual(client_updated.phone, "221555232")
+        self.assertEqual(client_updated.phone, "541555232")
         
     def test_clients_delete(self):
         Client.save_client(
             {
                 "name": "Juan Sebastian Veron",
-                "phone": "221555232",
+                "phone": "541555232",
                 "address": "13 y 44",
                 "email": "brujita75@hotmail.com",
             },
@@ -438,7 +438,7 @@ class VeterinaryModelTest(TestCase):
         Veterinary.save_veterinary(
             {
                 "name": "Jose Rodriguez",
-                "phone": "2214504505",
+                "phone": "5414504505",
                 "email": "joser@hotmail.com",
             },
         )
@@ -446,14 +446,14 @@ class VeterinaryModelTest(TestCase):
         self.assertEqual(len(veterinaries), 1)
 
         self.assertEqual(veterinaries[0].name, "Jose Rodriguez")
-        self.assertEqual(veterinaries[0].phone, "2214504505")
+        self.assertEqual(veterinaries[0].phone, "5414504505")
         self.assertEqual(veterinaries[0].email, "joser@hotmail.com")
         
     def test_vet_delete(self):
         Veterinary.save_veterinary(
             {
                 "name": "Jose Rodriguez",
-                "phone": "2214504505",
+                "phone": "5414504505",
                 "email": "joser@hotmail.com",
             },
         )
@@ -475,7 +475,7 @@ class VeterinaryModelTest(TestCase):
         
     def test_validate_wrong_email(self):
         data = {"name": "Jose Rodriguez",
-                "phone": "2214504505",
+                "phone": "5414504505",
                 "email": "joserhotmail.com",}
         errors = validate_veterinary(data)
         expected_errors = {
@@ -487,12 +487,12 @@ class VeterinaryModelTest(TestCase):
         Veterinary.save_veterinary(
             {
                 "name": "Jose Rodriguez",
-                "phone": "2214504505",
+                "phone": "5414504505",
                 "email": "joser@hotmail.com",
             },
         )
         veterinary = Veterinary.objects.get(pk=1)
-        self.assertEqual(veterinary.phone, "2214504505")
-        veterinary.update_veterinary({"phone": "2214504506"})
+        self.assertEqual(veterinary.phone, "5414504505")
+        veterinary.update_veterinary({"phone": "5414504506"})
         veterinary_updated = Veterinary.objects.get(pk=1)
-        self.assertEqual(veterinary_updated.phone, "2214504506")
+        self.assertEqual(veterinary_updated.phone, "5414504506")
