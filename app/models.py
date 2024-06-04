@@ -120,6 +120,16 @@ class Client(models.Model):
 
     @classmethod
     def save_client(cls, client_data):
+        """
+        Guarda un nuevo cliente en la base de datos después de validar los datos proporcionados.
+
+        Parámetros:
+        client_data (dict): Un diccionario que contiene los datos del cliente. Claves esperadas:
+            - "name" (str): El nombre del cliente.
+            - "phone" (str): El número de teléfono del cliente.
+            - "email" (str): La dirección de correo electrónico del cliente.
+            - "address" (str): La dirección del cliente.
+        """
         errors = validate_client(client_data)
 
         if len(errors.keys()) > 0:
@@ -135,6 +145,9 @@ class Client(models.Model):
         return True, None
 
     def update_client(self, client_data):
+        """
+        Metodo para actualizar los clientes con nuevos datos
+        """
         self.name = client_data.get("name", "") or self.name
         self.email = client_data.get("email", "") or self.email
         self.phone = client_data.get("phone", "") or self.phone
@@ -150,10 +163,16 @@ class Product(models.Model):
     stock = models.IntegerField(default=0)
     
     def __str__(self):
+        """
+            Retorna la representación en string del objeto.
+        """
         return self.name
 
     @classmethod
     def save_product(cls, product_data):
+        """
+            Guarda un producto 
+        """
         errors = validate_product(product_data)
 
         if len(errors.keys()) > 0:
@@ -169,11 +188,13 @@ class Product(models.Model):
         return True, None    
     
     def update_product(self, product_data):
+        """
+            Actualiza los datos de un producto
+        """
         self.name = product_data.get("name", "") or self.name
         self.type = product_data.get("type", "") or self.type
         self.price = product_data.get("price", "") or self.price
         self.stock = product_data.get("stock", "") or self.stock
-        
         try:
             if (int(self.stock) < 0):
                 raise ValueError("El stock no puede ser negativo.")
@@ -190,10 +211,16 @@ class Provider(models.Model):
     address = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
+        """
+            Retorna la representación en string del objeto.
+        """
         return self.name
 
     @classmethod
     def save_provider(cls, provider_data):
+        """
+            Guarda la informacio del proveedor
+        """
         errors = validate_provider(provider_data)
 
         if len(errors.keys()) > 0:
@@ -208,6 +235,18 @@ class Provider(models.Model):
         return True, None
 
     def update_provider(self, provider_data):
+        """
+    Actualiza los datos del proveedor con los datos proporcionados.
+
+    Parámetros:
+    provider_data (dict): Un diccionario que contiene los datos del proveedor. Claves opcionales:
+        - "name" (str): El nuevo nombre del proveedor.
+        - "email" (str): La nueva dirección de correo electrónico del proveedor.
+        - "address" (str): La nueva dirección del proveedor.
+
+    Retorna:
+    None
+    """
         self.name = provider_data.get("name", "") or self.name
         self.email = provider_data.get("email", "") or self.email
         self.address = provider_data.get("address","") or self.address
@@ -225,6 +264,9 @@ class Veterinary(models.Model):
 
     @classmethod
     def save_veterinary(cls, veterinary_data):
+        """
+        Guarda un veterinario
+        """
         errors = validate_client(veterinary_data)
 
         if len(errors.keys()) > 0:
@@ -239,6 +281,9 @@ class Veterinary(models.Model):
         return True, None
 
     def update_veterinary(self, veterinary_data):
+        """
+        Actualiza los datos del veterinario
+        """
         self.name = veterinary_data.get("name", "") or self.name
         self.email = veterinary_data.get("email", "") or self.email
         self.phone = veterinary_data.get("phone", "") or self.phone
@@ -284,10 +329,16 @@ class Pet(models.Model):
     birthday = models.DateField()
 
     def __str__(self):
+        """
+            Retorna la representación en string del objeto.
+        """
         return self.name
 
     @classmethod
     def save_pet(cls, pet_data):
+        """
+        Guarda una mascota
+        """
         errors = validate_pet(pet_data)
 
         if errors:
@@ -302,6 +353,9 @@ class Pet(models.Model):
         return True, None
 
     def update_pet(self, pet_data):
+        """
+        Actualiza los datos de la mascota
+        """
         self.name = pet_data.get("name", "") or self.name
         self.breed = pet_data.get("breed", "") or self.breed
         self.birthday = pet_data.get("birthday", "") or self.birthday
@@ -318,6 +372,9 @@ class Med(models.Model):
     
     @classmethod
     def save_med(cls, med_data):
+        """
+        Guarda una medicina
+        """
         errors = validate_med(med_data)
 
         if len(errors.keys()) > 0:
@@ -331,6 +388,9 @@ class Med(models.Model):
         return True, None
 
     def update_med(self, med_data):
+        """
+        Actualizar medicina
+        """
         errors = validate_med(med_data)
 
         if len(errors.keys()) > 0:
