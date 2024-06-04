@@ -28,7 +28,7 @@ class ClientsTest(TestCase):
             reverse("clients_form"),
             data={
                 "name": "Juan Sebastian Veron",
-                "phone": "221555232",
+                "phone": "54221555232",
                 "address": "13 y 44",
                 "email": "brujita75@hotmail.com",
             },
@@ -37,7 +37,7 @@ class ClientsTest(TestCase):
         self.assertEqual(len(clients), 1)
 
         self.assertEqual(clients[0].name, "Juan Sebastian Veron")
-        self.assertEqual(clients[0].phone, "221555232")
+        self.assertEqual(clients[0].phone, "54221555232")
         self.assertEqual(clients[0].address, "13 y 44")
         self.assertEqual(clients[0].email, "brujita75@hotmail.com")
 
@@ -62,7 +62,7 @@ class ClientsTest(TestCase):
             reverse("clients_form"),
             data={
                 "name": "Juan Sebastian Veron",
-                "phone": "221555232",
+                "phone": "54221555232",
                 "address": "13 y 44",
                 "email": "brujita75",
             },
@@ -74,7 +74,7 @@ class ClientsTest(TestCase):
         client = Client.objects.create(
             name="Juan Sebastián Veron",
             address="13 y 44",
-            phone="221555232",
+            phone="54221555232",
             email="brujita75@hotmail.com",
         )
 
@@ -100,7 +100,7 @@ class ClientsTest(TestCase):
             reverse("clients_form"),
             data={
                 "name": "Benjamin Peres",
-                "phone": "221asd",
+                "phone": "54221asd",
                 "address": "1 y 60",
                 "email": "benjaminperes@hotmail.com",
             },
@@ -111,7 +111,7 @@ class ClientsTest(TestCase):
     def test_validation_update_with_invalid_phone(self):
         client = Client.objects.create(
                 name= "Benjamin Peres",
-                phone= "2214504505",
+                phone= "542214504505",
                 address= "1 y 60",
                 email= "benjaminperes@hotmail.com",
         )
@@ -120,7 +120,7 @@ class ClientsTest(TestCase):
             reverse("clients_form"),
             data={
                 "id": client.id,
-                "phone": "123asd",
+                "phone": "54123asd",
             },
         )
 
