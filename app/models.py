@@ -227,7 +227,7 @@ class Veterinary(models.Model):
 
     @classmethod
     def save_veterinary(cls, veterinary_data):
-        errors = validate_client(veterinary_data)
+        errors = validate_veterinary(veterinary_data)
 
         if len(errors.keys()) > 0:
             return False, errors
