@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from app.models import Client, Product, Pet, Med, validate_pet, Provider, Veterinary, validate_veterinary
+from app.models import Client, Product, Pet, Med, validate_pet, Provider, Veterinary, validate_veterinary, validate_client
 from datetime import date, timedelta
 
 
@@ -74,6 +74,60 @@ class ClientModelTest(TestCase):
         response = self.client.post(reverse('clients_delete'), {'client_id': client.id})
         self.assertEqual(Client.objects.count(), initial_count - 1)
         self.assertRedirects(response, reverse('clients_repo'))
+
+    def test_validate_wrong_type_phone(self):
+        data = {"name": "Jose Rodriguez",
+                "phone": "aaa",
+                "address": "13 y 44",
+                "email": "joser@hotmail.com",}
+        
+        errors = validate_client(data)
+        expected_errors = {
+            "phone": "Formato de telefono invalido",
+        }
+        self.assertDictEqual(expected_errors, errors)
+
+    def test_validate_wrong_phone(self):
+        data = {"name": "Jose Rodriguez",
+                "phone": "1111111111",
+                "address": "13 y 44",
+                "email": "joser@hotmail.com",}
+        
+        errors = validate_client(data)
+        expected_errors = {
+            "phone": "El telefono debe comenzar con '54'",
+        }
+        self.assertDictEqual(expected_errors, errors)
+
+    def test_cant_update_client_with_error_phone(self):
+        Client.save_client(
+            {
+                "name": "Jose Rodriguez",
+                "phone": "5414504505",
+                "address": "13 y 44",
+                "email": "joser@hotmail.com",
+            },
+        )
+        client = Client.objects.get(pk=1)
+        self.assertEqual(client.phone, "5414504505")
+        client.update_client({"phone": "1114504506"})
+        client_updated = Client.objects.get(pk=1)
+        self.assertEqual(client_updated.phone, "5414504505")
+
+    def test_cant_update_client_with_error_type_phone(self):
+        Client.save_client(
+            {
+                "name": "Jose Rodriguez",
+                "phone": "5414504505",
+                "address": "13 y 44",
+                "email": "joser@hotmail.com",
+            },
+        )
+        client = Client.objects.get(pk=1)
+        self.assertEqual(client.phone, "5414504505")
+        client.update_client({"phone": "aaaaa"})
+        client_updated = Client.objects.get(pk=1)
+        self.assertEqual(client_updated.phone, "5414504505")
 
 class ProviderModelTest(TestCase):
     def test_can_create_and_get_provider(self):
@@ -482,7 +536,7 @@ class VeterinaryModelTest(TestCase):
             "email": "Por favor ingrese un email valido",
         }
         self.assertDictEqual(expected_errors, errors)
-        
+
     def test_cant_update_veterinary_with_error(self):
         Veterinary.save_veterinary(
             {
