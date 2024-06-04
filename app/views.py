@@ -115,7 +115,10 @@ def products_form(request, id=None):
         try:
             int(stock)
         except Exception:
-            errors["stock"] = "El campo de stock no puede estar vacio."
+            if (product_id == ""):
+                saved, errors = Product.save_product(request.POST)
+            else:
+                errors["stock"] = "El campo de stock no puede estar vacio."
             return render(
             request, "products/form.html", {"errors": errors, "product": request.POST},
             )
