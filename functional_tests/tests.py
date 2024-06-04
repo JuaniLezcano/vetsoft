@@ -597,7 +597,9 @@ class PetCreateEditTestCase(PlaywrightTestCase):
         expect(edit_action).to_have_attribute("href", reverse("pets_edit", kwargs={"id": pet.id}))
 
     def test_edit_form_should_be_able_to_throw_an_error_if(self):
-       
+        """
+        Muestra un error en caso de editar con datos erroneos
+        """
         pet = Pet.objects.create( # noqa: F841
             name="Paco",
             breed="Perro",
