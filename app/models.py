@@ -16,11 +16,12 @@ def validate_client(data):
 
     if email == "":
         errors["email"] = "Por favor ingrese un email"
-    elif email.count("@") == 0:
-        errors["email"] = "Por favor ingrese un email valido"
-    elif email.count("@vetsoft.com") == 0:
-        errors["email"] = "Por favor ingrese un email de vetsoft.com"
-
+    else:
+        try:
+            if not email.endswith("@vetsoft.com"):
+                errors["email"] = "El email debe terminar en 'vetsoft.com.'"
+        except ValueError:
+            errors["email"] = "Formato de email inválido."
     return errors
 
 def validate_provider(data):
@@ -138,11 +139,9 @@ class Client(models.Model):
 
     def update_client(self, client_data):
         self.name = client_data.get("name", "") or self.name
-        if (client_data.get("email", "").count("@vetsoft.com") == 1):
-            self.email = client_data.get("email", "") or self.email
+        self.email = client_data.get("email", "") or self.email
         self.phone = client_data.get("phone", "") or self.phone
         self.address = client_data.get("address", "") or self.address
-
         self.save()
 
 

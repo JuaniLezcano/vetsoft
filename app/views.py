@@ -17,12 +17,21 @@ def clients_form(request, id=None):
         client_id = request.POST.get("id", "")
         errors = {}
         saved = True
+        email = request.POST.get("email")
 
         if client_id == "":
             saved, errors = Client.save_client(request.POST)
         else:
             client = get_object_or_404(Client, pk=client_id)
             client.update_client(request.POST)
+        if email:
+            try:
+                if not email.endswith("@vetsoft.com"):
+                    errors["email"] = "El email debe terminar en 'vetsoft.com.'"
+                    saved = False
+            except ValueError:
+                errors["email"] = "Formato de email inválido."
+
 
         if saved:
             return redirect(reverse("clients_repo"))
