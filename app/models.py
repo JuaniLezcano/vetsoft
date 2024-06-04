@@ -13,8 +13,12 @@ def validate_client(data):
 
     if phone == "":
         errors["phone"] = "Por favor ingrese un teléfono"
-    elif not phone.startswith("54"):
-        errors["phone"] = "El telefono debe comenzar con '54'" 
+    else:
+        try:
+            if not phone.startswith("54"):
+                errors["phone"] = "El telefono debe comenzar con '54'"
+        except ValueError:
+            errors["phone"] = "Formato de telefono invalido"
 
     if email == "":
         errors["email"] = "Por favor ingrese un email"
@@ -76,8 +80,12 @@ def validate_veterinary(data):
 
     if phone == "":
         errors["phone"] = "Por favor ingrese un teléfono"
-    elif not phone.startswith("54"):
-        errors["phone"] = "El telefono debe comenzar con '54'"
+    else:
+        try:
+            if not phone.startswith("54"):
+                errors["phone"] = "El telefono debe comenzar con '54'"
+        except ValueError:
+            errors["phone"] = "Formato de telefono invalido"
 
     if email == "":
         errors["email"] = "Por favor ingrese un email"
@@ -139,12 +147,29 @@ class Client(models.Model):
         return True, None
 
     def update_client(self, client_data):
+        errors = {}
         self.name = client_data.get("name", "") or self.name
         self.email = client_data.get("email", "") or self.email
-        self.phone = client_data.get("phone", "") or self.phone
         self.address = client_data.get("address", "") or self.address
 
+        phone = client_data.get("phone", "")
+        if phone:
+            try:
+                if not phone.startswith("54"):
+                    errors["phone"] = "El telefono debe comenzar con '54'"
+                    self.phone = Client.objects.get(pk=self.pk).phone
+                    return False, errors
+                self.phone = phone
+            except ValueError:
+                errors["phone"] = "Formato de Telefono invalido"
+                self.phone = Client.objects.get(pk=self.pk).phone
+                return False, errors
+
+        if not (client_data.get("name") or client_data.get("email") or client_data.get("adress") or client_data.get("phone")):
+            return True, None
+
         self.save()
+        return True, None
 
 
 class Product(models.Model):
@@ -243,11 +268,28 @@ class Veterinary(models.Model):
         return True, None
 
     def update_veterinary(self, veterinary_data):
+        errors = {}
         self.name = veterinary_data.get("name", "") or self.name
         self.email = veterinary_data.get("email", "") or self.email
-        self.phone = veterinary_data.get("phone", "") or self.phone
+
+        phone = veterinary_data.get("phone", "")
+        if phone:
+            try:
+                if not phone.startswith("54"):
+                    errors["phone"] = "El telefono debe comenzar con '54'"
+                    self.phone = Veterinary.objects.get(pk=self.pk).phone
+                    return False, errors
+                self.phone = phone
+            except ValueError:
+                errors["phone"] = "Formato de Telefono invalido"
+                self.phone = Veterinary.objects.get(pk=self.pk).phone
+                return False, errors
+
+        if not (veterinary_data.get("name") or veterinary_data.get("email") or veterinary_data.get("phone")):
+            return True, None
 
         self.save()
+        return True, None
 
 def validate_pet(data):
     errors = {}

@@ -17,7 +17,7 @@ def clients_form(request, id=None):
         client_id = request.POST.get("id", "")
         errors = {}
         saved = True
-        phone = request.POST.get("phone")
+        phone = request.POST.get("phone", "")
 
         if client_id == "":
             saved, errors = Client.save_client(request.POST)
@@ -25,10 +25,13 @@ def clients_form(request, id=None):
             client = get_object_or_404(Client, pk=client_id)
             client.update_client(request.POST)
 
-        if not phone.startswith("54"):
-            saved = False
-            errors["phone"] = "El telefono debe comenzar con '54'"
-            
+        if phone:
+            try:
+                if not phone.startswith("54"):
+                    saved=False
+                    errors["phone"] = "El telefono debe comenzar con '54'"
+            except ValueError:
+                errors["phone"] = "Formato de Telefono invalido"
 
         if saved:
             return redirect(reverse("clients_repo"))
@@ -224,7 +227,7 @@ def veterinary_form(request, id=None):
         veterinary_id = request.POST.get("id", "")
         errors = {}
         saved = True
-        phone = request.POST.get("phone")
+        phone = request.POST.get("phone", "")
 
         if veterinary_id == "":
             saved, errors = Veterinary.save_veterinary(request.POST)
@@ -232,9 +235,13 @@ def veterinary_form(request, id=None):
             veterinary = get_object_or_404(Veterinary, pk=veterinary_id)
             veterinary.update_veterinary(request.POST)
         
-        if not phone.startswith("54"):
-            saved = False
-            errors["phone"] = "El telefono debe comenzar con '54'"
+        if phone:
+            try:
+                if not phone.startswith("54"):
+                    saved=False
+                    errors["phone"] = "El telefono debe comenzar con '54'"
+            except ValueError:
+                errors["phone"] = "Formato de Telefono invalido"
 
         if saved:
             return redirect(reverse("veterinary_repo"))
