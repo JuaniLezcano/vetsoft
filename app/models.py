@@ -6,6 +6,7 @@ def validate_client(data):
 
     name = data.get("name", "")
     phone = data.get("phone", "")
+    city = data.get("city", "")
     email = data.get("email", "")
 
     if name == "":
@@ -14,6 +15,9 @@ def validate_client(data):
     if phone == "":
         errors["phone"] = "Por favor ingrese un teléfono"
 
+    if city == "":
+        errors["city"] = "Por favor seleccione una ciudad"
+    
     if email == "":
         errors["email"] = "Por favor ingrese un email"
     elif email.count("@") == 0:
@@ -110,12 +114,17 @@ def validate_med(data):
     return errors
 
 class Client(models.Model):
+    class City(models.TextChoices):
+        la_Plata = "La Plata"
+        berisso = "Berisso"
+        ensenada = "Ensenada"
+
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=15)
     email = models.EmailField()
-    address = models.CharField(max_length=100, blank=True)
+    city = models.CharField(choices=City.choices,max_length=100)
 
-    def __str__(self):
+    def _str_(self):
         return self.name
 
     @classmethod
@@ -129,7 +138,7 @@ class Client(models.Model):
             name=client_data.get("name"),
             phone=client_data.get("phone"),
             email=client_data.get("email"),
-            address=client_data.get("address"),
+            city=client_data.get("city"),
         )
 
         return True, None
@@ -138,7 +147,7 @@ class Client(models.Model):
         self.name = client_data.get("name", "") or self.name
         self.email = client_data.get("email", "") or self.email
         self.phone = client_data.get("phone", "") or self.phone
-        self.address = client_data.get("address", "") or self.address
+        self.city = client_data.get("city", "") or self.city
 
         self.save()
 
