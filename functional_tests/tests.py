@@ -2,7 +2,7 @@ import os
 from datetime import date
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-from django.urls import reverse 
+from django.urls import reverse
 from playwright.sync_api import Browser, expect, sync_playwright
 
 from app.models import Client, Med, Pet, Product

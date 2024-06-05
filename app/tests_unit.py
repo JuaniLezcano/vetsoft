@@ -1,8 +1,18 @@
 from datetime import date, timedelta
 
 from django.test import TestCase
+from django.urls import reverse
 
-from app.models import Client, Med, Pet, Product, Provider, validate_pet, Veterinary, validate_veterinary
+from app.models import (
+    Client,
+    Med,
+    Pet,
+    Product,
+    Provider,
+    Veterinary,
+    validate_pet,
+    validate_veterinary,
+)
 
 
 class ClientModelTest(TestCase):
