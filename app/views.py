@@ -55,7 +55,7 @@ def clients_form(request, id=None):
         client_id = request.POST.get("id", "")
         errors = {}
         saved = True
-        
+
         if client_id == "":
             saved, errors = Client.save_client(request.POST)
         else:

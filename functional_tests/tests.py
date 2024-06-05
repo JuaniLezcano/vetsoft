@@ -358,6 +358,11 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
         )
 
     def test_should_be_able_to_show_error_if_invalid_phone(self):
+        """
+        Prueba que se muestre un mensaje de error si se ingresa un número de teléfono inválido.
+        Asegura que el formulario retorna un mensaje de error cuando el número de teléfono
+        contiene caracteres no numéricos.
+        """
         self.page.goto(f"{self.live_server_url}{reverse('clients_form')}")
 
         self.page.get_by_label("Nombre").fill("Benjamin Peres")

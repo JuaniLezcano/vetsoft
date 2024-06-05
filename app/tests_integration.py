@@ -165,6 +165,11 @@ class ClientsTest(TestCase):
         self.assertEqual(editedClient.email, client.email)
 
     def test_validation_create_client_with_invalid_phone(self):
+        """
+        Prueba la creación de un cliente con un número de teléfono inválido.
+        Asegura que el formulario retorna un mensaje de error cuando el número
+        de teléfono contiene caracteres no numéricos.
+        """
         response = self.client.post(
             reverse("clients_form"),
             data={
@@ -176,8 +181,13 @@ class ClientsTest(TestCase):
         )
 
         self.assertContains(response, "Por favor ingrese un numero de telefono valido, solo digitos")
-        
+
     def test_validation_update_with_invalid_phone(self):
+        """
+        Prueba la actualización de un cliente con un número de teléfono inválido.
+        Asegura que el formulario retorna un mensaje de error y no actualiza el
+        número de teléfono cuando el número proporcionado contiene caracteres no numéricos.
+        """
         client = Client.objects.create(
                 name= "Benjamin Peres",
                 phone= "542214504505",
@@ -194,9 +204,9 @@ class ClientsTest(TestCase):
         )
 
         editedClient = Client.objects.get(pk=client.id)
-        
+
         self.assertEqual(str(editedClient.phone), client.phone)
-        
+
 class ProvidersTest(TestCase):
     """
     Clase de prueba para las vistas y funcionalidades relacionadas con los proveedores.
@@ -234,7 +244,7 @@ class ProvidersTest(TestCase):
 
 
         self.assertRedirects(response, reverse("providers_repo"))
-        
+
     def test_validation_invalid_email(self):
         """
         Verifica que en el caso de ingresar un mail no valido de un aviso

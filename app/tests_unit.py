@@ -91,7 +91,7 @@ class ClientModelTest(TestCase):
         client_updated = Client.objects.get(pk=1)
 
         self.assertEqual(str(client_updated.phone), "54221555232")
-                
+
     def test_clients_delete(self):
         """
         Verifica que se puede eliminar un cliente
@@ -111,6 +111,10 @@ class ClientModelTest(TestCase):
         self.assertRedirects(response, reverse('clients_repo'))
 
     def test_cant_update_client_with_characters_in_phone_input(self):
+        """
+        Prueba que no se pueda actualizar un cliente con caracteres no numéricos en el teléfono.
+        Asegura que el número de teléfono no cambia cuando se intenta actualizar con un valor inválido.
+        """
         Client.save_client(
             {
                 "name": "Benjamin Peres",
@@ -122,12 +126,16 @@ class ClientModelTest(TestCase):
         client = Client.objects.get(pk=1)
 
         client.update_client({"phone": "123asd"})
-        
+
         client_updated = Client.objects.get(pk=1)
 
         self.assertEqual(str(client_updated.phone), "542214504505")
-        
+
     def test_cant_create_client_with_characters_in_phone_input(self):
+        """
+        Prueba que no se pueda crear un cliente con caracteres no numéricos en el teléfono.
+        Asegura que el número de teléfono no pueda contener caracteres no númericos.
+        """
         Client.save_client(
             {
                 "name": "Benjamin Peres",
@@ -138,8 +146,8 @@ class ClientModelTest(TestCase):
         )
         clients = Client.objects.all()
         self.assertEqual(len(clients), 0)
-        
-        
+
+
 class ProviderModelTest(TestCase):
     """
     Clase de prueba para el modelo Provider.
