@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime, date
+import re
 
 def validate_client(data):
     errors = {}
@@ -7,6 +8,7 @@ def validate_client(data):
     name = data.get("name", "")
     phone = data.get("phone", "")
     email = data.get("email", "")
+    pattern_email = r'^[a-zA-Z0-9._%+-]+@vetsoft\.com$'
 
     if name == "":
         errors["name"] = "Por favor ingrese un nombre"
@@ -18,8 +20,8 @@ def validate_client(data):
         errors["email"] = "Por favor ingrese un email"
     else:
         try:
-            if not email.endswith("@vetsoft.com"):
-                errors["email"] = "El email debe terminar en 'vetsoft.com.'"
+            if not re.match(pattern_email, email):
+                 errors["email"] =("El email debe terminar con @vetsoft.com y contener algo antes")
         except ValueError:
             errors["email"] = "Formato de email inválido."
     return errors

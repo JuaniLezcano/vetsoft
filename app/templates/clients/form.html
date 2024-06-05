@@ -57,6 +57,8 @@
                         name="email"
                         class="form-control {% if errors.email %}is-invalid{% endif %}"
                         value="{{ client.email }}"
+                        pattern="^[a-zA-Z0-9._%+-]+@vetsoft\.com$"
+                        title="El email debe finalizar con '@vetsoft.com'."
                         required
                     />
 
