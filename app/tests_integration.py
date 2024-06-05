@@ -126,7 +126,7 @@ class ProvidersTest(TestCase):
             },
         )
 
-        self.assertContains(response, "Por favor ingrese un email valido")        
+        self.assertContains(response, "Por favor ingrese un email valido")
     def test_validation_errors_create_provider(self):
         response = self.client.post(
             reverse("providers_form"),
@@ -172,11 +172,11 @@ class ProvidersTest(TestCase):
     def test_form_use_form_template(self):
         response = self.client.get(reverse("providers_form"))
         self.assertTemplateUsed(response, "providers/form.html")
-        
 
-    
 
-    
+
+
+
 
 
 class MedicinesTest(TestCase):
@@ -272,7 +272,7 @@ class ProductsTest(TestCase):
         self.assertContains(response, "Por favor ingrese un tipo")
         self.assertContains(response, "Por favor ingrese un precio")
         self.assertContains(response, "Por favor ingrese un stock")
-        
+
     def test_can_create_product(self):
         response = self.client.post(
             reverse("products_form"),
@@ -292,7 +292,7 @@ class ProductsTest(TestCase):
         self.assertEqual(products[0].stock, 50)
 
         self.assertRedirects(response, reverse("products_repo"))
-    
+
     def test_can_update_stock_product(self):
         product = Product.objects.create(
             name= "Lavandina",
@@ -300,7 +300,7 @@ class ProductsTest(TestCase):
             price= 100,
             stock= 50,
         )
-        
+
         response = self.client.post(
             reverse("products_form"),
             data={
@@ -315,7 +315,7 @@ class ProductsTest(TestCase):
         self.assertEqual(editedProduct.type, product.type)
         self.assertEqual(editedProduct.price, product.price)
         self.assertEqual(editedProduct.stock, 100)
-        
+
     def test_update_product_with_empty_stock(self):
         product = Product.objects.create(
             name= "Lavandina",
@@ -323,7 +323,7 @@ class ProductsTest(TestCase):
             price= 100,
             stock= 50,
         )
-        
+
         response = self.client.post(
             reverse("products_form"),
             data={
@@ -331,14 +331,14 @@ class ProductsTest(TestCase):
                 "stock": "",
             },
         )
-        
+
         editedProduct = Product.objects.get(pk=product.id)
         self.assertContains(response, "El campo de stock no puede estar vacio.")
         self.assertEqual(editedProduct.name, product.name)
         self.assertEqual(editedProduct.type, product.type)
         self.assertEqual(editedProduct.price, product.price)
         self.assertEqual(editedProduct.stock, 50)
-        
+
     def test_update_product_with_negative_stock(self):
         product = Product.objects.create(
             name= "Lavandina",
@@ -346,7 +346,7 @@ class ProductsTest(TestCase):
             price= 100,
             stock= 50,
         )
-        
+
         response = self.client.post(
             reverse("products_form"),
             data={
@@ -361,7 +361,7 @@ class ProductsTest(TestCase):
         self.assertEqual(editedProduct.type, product.type)
         self.assertEqual(editedProduct.price, product.price)
         self.assertEqual(editedProduct.stock, 50)
-    
+
 class PetsTest(TestCase):
     def test_repo_use_repo_template(self):
             response = self.client.get(reverse("pets_repo"))
@@ -389,7 +389,7 @@ class PetsTest(TestCase):
         self.assertEqual(pets[0].birthday, date(2021, 1, 1))
 
         self.assertRedirects(response, reverse("pets_repo"))
-    
+
     def test_can_update_pet_breed(self):
         pet_birthday = (date(2021, 1, 1)).strftime("%Y-%m-%d")
         pet = Pet.objects.create(
@@ -397,7 +397,7 @@ class PetsTest(TestCase):
             breed = "Perro",
             birthday = pet_birthday,
         )
-        
+
         response = self.client.post(
             reverse("pets_form"),
             data={
@@ -411,7 +411,7 @@ class PetsTest(TestCase):
         self.assertEqual(editedPet.name, pet.name)
         self.assertEqual(editedPet.birthday, date(2021, 1, 1)) # No se puede modificar la fecha de nacimiento sin parsear o convertir al mismo.
         self.assertEqual(editedPet.breed, "Conejo")
-    
+
     def test_validation_errors_create_pet(self):
         response = self.client.post(
             reverse("pets_form"),
@@ -436,7 +436,7 @@ class PetsTest(TestCase):
 
     def test_should_response_with_404_status_if_pet_doesnt_exists(self):
         response = self.client.get(reverse("pets_edit", kwargs={"id": 100}))
-        self.assertEqual(response.status_code, 404)    
+        self.assertEqual(response.status_code, 404)
 
     def test_validation_invalid_birthday(self):
         response = self.client.post(
@@ -474,14 +474,14 @@ class PetsTest(TestCase):
         self.assertEqual(editedPet.name, "Maguile")
         self.assertEqual(editedPet.breed, pet.breed)
         self.assertEqual(str(editedPet.birthday), "2015-05-20")
-        
+
     def test_invalid_birthday_format(self):
         response = self.client.post(
             reverse("pets_form"),
             data={"birthday": "2022-13-32"},
         )
         self.assertContains(response, "Formato de fecha invalido. Utilice el formato YYYY-MM-DD")
-        
+
 class VetsTest(TestCase):
     def test_validation_errors_create_vet(self):
         response = self.client.post(
@@ -492,7 +492,7 @@ class VetsTest(TestCase):
         self.assertContains(response, "Por favor ingrese un nombre")
         self.assertContains(response, "Por favor ingrese un teléfono")
         self.assertContains(response, "Por favor ingrese un email")
-        
+
     def test_can_create_vet(self):
         response = self.client.post(
             reverse("veterinary_form"),

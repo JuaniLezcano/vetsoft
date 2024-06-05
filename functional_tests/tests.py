@@ -423,7 +423,7 @@ class PetCreateEditTestCase(PlaywrightTestCase):
         expect(self.page.get_by_text("Benita")).to_be_visible()
         expect(self.page.get_by_text("Perro")).to_be_visible()
         expect(self.page.get_by_text("Jan. 1, 2021")).to_be_visible()
-    
+
     def test_should_view_errors_if_form_pet_is_invalid(self):
         self.page.goto(f"{self.live_server_url}{reverse('pets_form')}")
 
@@ -444,7 +444,7 @@ class PetCreateEditTestCase(PlaywrightTestCase):
         expect(self.page.get_by_text("Por favor ingrese un nombre")).not_to_be_visible()
         expect(self.page.get_by_text("Por favor ingrese una raza")).to_be_visible()
         expect(self.page.get_by_text("Por favor ingrese una fecha de nacimiento")).not_to_be_visible()
-    
+
     def test_should_be_able_to_edit_a_pet(self):
         pet_birthday = (date(2021, 1, 1)).strftime("%Y-%m-%d")
         pet = Pet.objects.create(

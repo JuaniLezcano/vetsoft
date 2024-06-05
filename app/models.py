@@ -4,6 +4,25 @@ from django.db import models
 
 
 def validate_client(data):
+    """
+    Valida los datos del cliente.
+
+    Este método verifica que los campos 'name', 'phone' y 'email' estén presentes
+    y no vacíos en el diccionario 'data'. También valida que el campo 'email' contenga
+    al menos un carácter '@'.
+
+    Parámetros:
+        data (dict): Un diccionario que contiene los datos del cliente con posibles
+        claves 'name', 'phone' y 'email'.
+
+    Devuelve:
+        dict: Un diccionario que contiene los errores de validación. Si no hay errores,
+        el diccionario estará vacío. Las posibles claves del diccionario son:
+            - 'name': Si el nombre está vacío.
+            - 'phone': Si el teléfono está vacío.
+            - 'email': Si el email está vacío o no es válido.
+    """
+
     errors = {}
 
     name = data.get("name", "")
@@ -24,6 +43,17 @@ def validate_client(data):
     return errors
 
 def validate_provider(data):
+    """
+    Valida los datos proporcionados para un proveedor.
+
+    Args:
+        data (dict): Un diccionario que contiene los datos del proveedor a validar.
+                     Debe contener las claves "name", "email" y "address".
+
+    Returns:
+        dict: Un diccionario que contiene los errores de validación.
+              Las claves son los nombres de los campos y los valores son los mensajes de error.
+    """
     errors = {}
 
     name = data.get("name", "")
@@ -44,6 +74,17 @@ def validate_provider(data):
     return errors
 
 def validate_product(data):
+    """
+    Valida los datos proporcionados para un producto.
+
+    Args:
+        data (dict): Un diccionario que contiene los datos del producto a validar.
+                     Debe contener las claves "name", "type", "price" y "stock".
+
+    Returns:
+        dict: Un diccionario que contiene los errores de validación.
+              Las claves son los nombres de los campos y los valores son los mensajes de error.
+    """
     errors = {}
 
     name = data.get("name", "")
@@ -65,6 +106,17 @@ def validate_product(data):
     return errors
 
 def validate_veterinary(data):
+    """
+    Valida los datos proporcionados para una veterinaria.
+
+    Args:
+        data (dict): Un diccionario que contiene los datos de la veterinaria a validar.
+                     Debe contener las claves "name", "phone" y "email".
+
+    Returns:
+        dict: Un diccionario que contiene los errores de validación.
+              Las claves son los nombres de los campos y los valores son los mensajes de error.
+    """
     errors = {}
 
     name = data.get("name", "")
@@ -86,6 +138,17 @@ def validate_veterinary(data):
 
 
 def validate_med(data):
+    """
+    Valida los datos proporcionados para un medicamento.
+
+    Args:
+        data (dict): Un diccionario que contiene los datos del medicamento a validar.
+                     Debe contener las claves "name", "desc" y "dose".
+
+    Returns:
+        dict: Un diccionario que contiene los errores de validación.
+              Las claves son los nombres de los campos y los valores son los mensajes de error.
+    """
     errors = {}
 
     name = data.get("name", "")
@@ -150,7 +213,7 @@ class Product(models.Model):
     type = models.CharField(max_length=50)
     price = models.FloatField()
     stock = models.IntegerField(default=0)
-    
+
     def __str__(self):
         return self.name
 
@@ -168,14 +231,14 @@ class Product(models.Model):
             stock=product_data.get("stock"),
         )
 
-        return True, None    
-    
+        return True, None
+
     def update_product(self, product_data):
         self.name = product_data.get("name", "") or self.name
         self.type = product_data.get("type", "") or self.type
         self.price = product_data.get("price", "") or self.price
         self.stock = product_data.get("stock", "") or self.stock
-        
+
         try:
             if (int(self.stock) < 0):
                 raise ValueError("El stock no puede ser negativo.")
@@ -248,6 +311,17 @@ class Veterinary(models.Model):
         self.save()
 
 def validate_pet(data):
+    """
+    Valida los datos proporcionados para una mascota.
+
+    Args:
+        data (dict): Un diccionario que contiene los datos de la mascota a validar.
+                     Debe contener las claves "name", "breed" y "birthday".
+
+    Returns:
+        dict: Un diccionario que contiene los errores de validación.
+              Las claves son los nombres de los campos y los valores son los mensajes de error.
+    """
     errors = {}
 
     name = data.get("name", "")
@@ -269,7 +343,7 @@ def validate_pet(data):
                 errors["birthday"] = "La fecha de nacimiento no puede ser posterior al día actual."
         except ValueError:
             errors["birthday"] = "Formato de fecha invalido. Utilice el formato YYYY-MM-DD"
-            
+
     return errors
 
 class Pet(models.Model):
@@ -280,7 +354,7 @@ class Pet(models.Model):
         Pájaro = "Pájaro"
         Pez = "Pez"
         Otro = "Otro"
-    
+
     name = models.CharField(max_length=100)
     breed = models.CharField(choices=Breed.choices, max_length=50)
     birthday = models.DateField()
@@ -309,7 +383,7 @@ class Pet(models.Model):
         self.breed = pet_data.get("breed", self.breed)
 
         birthday_str = pet_data.get("birthday", None)
-        
+
         if birthday_str:
             try:
                 birthday_date = datetime.strptime(birthday_str, "%Y-%m-%d").date()
@@ -337,14 +411,14 @@ class Med(models.Model):
 
     def __str__(self):
             return self.name
-    
+
     @classmethod
     def save_med(cls, med_data):
         errors = validate_med(med_data)
 
         if len(errors.keys()) > 0:
             return False, errors
-        
+
         Med.objects.create(
             name=med_data.get("name"),
             desc=med_data.get("desc"),
@@ -357,7 +431,7 @@ class Med(models.Model):
 
         if len(errors.keys()) > 0:
             return False, errors
-        
+
         errors = validate_med(med_data)
 
         if len(errors.keys()) > 0:
