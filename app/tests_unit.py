@@ -1,7 +1,18 @@
+from datetime import date, timedelta
+
 from django.test import TestCase
 from django.urls import reverse
-from app.models import Client, Product, Pet, Med, validate_pet, Provider, Veterinary, validate_veterinary
-from datetime import date, timedelta
+
+from app.models import (
+    Client,
+    Med,
+    Pet,
+    Product,
+    Provider,
+    Veterinary,
+    validate_pet,
+    validate_veterinary,
+)
 
 
 class ClientModelTest(TestCase):
@@ -467,7 +478,6 @@ class PetModelTest(TestCase):
         pet_updated = Pet.objects.get(pk=1)
         self.assertEqual(pet_updated.birthday, date(2021, 1, 1))
     
-
     
 class VeterinaryModelTest(TestCase):
     def test_can_create_and_get_vet(self):
