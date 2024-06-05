@@ -2,17 +2,8 @@ from datetime import date, timedelta
 
 from django.test import TestCase
 from django.urls import reverse
-
-from app.models import (
-    Client,
-    Med,
-    Pet,
-    Product,
-    Provider,
-    Veterinary,
-    validate_pet,
-    validate_veterinary,
-)
+from app.models import Client, Product, Pet, Med, validate_pet, Provider, Veterinary, validate_veterinary , validate_provider
+from datetime import date, timedelta
 
 
 class ClientModelTest(TestCase):
@@ -124,6 +115,16 @@ class ProviderModelTest(TestCase):
         self.assertEqual(providers[0].name, "Farmacity S.A")
         self.assertEqual(providers[0].email, "moltito@hotmail.com")
         self.assertEqual(providers[0].address, "Rio negro 2265")
+    
+    def test_address_not_null(self):
+        data = {"name": "Farmacity S.A",
+                "email": "moltito@hotmail.com",
+                "address": "",}
+        errors = validate_provider(data)
+        expected_errors = {
+            "address": "Por favor ingrese una direccion",
+        }
+        self.assertDictEqual(expected_errors, errors)
 
     def test_provider_delete(self):
         Provider.save_provider(

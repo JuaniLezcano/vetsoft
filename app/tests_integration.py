@@ -213,7 +213,19 @@ class ProvidersTest(TestCase):
     def test_form_use_form_template(self):
         response = self.client.get(reverse("providers_form"))
         self.assertTemplateUsed(response, "providers/form.html")
+    
+    def test_cant_create_provider_with_empty_address(self):
+        response = self.client.post(
+            reverse("providers_form"),
+            data={
+                "name":"Farmacity S.A",
+                "email":"moltito@hotmail.com",
+                "address":"",
+            },
+        )
+        self.assertContains(response, "Por favor ingrese una direccion")
 
+        
 
 
 
