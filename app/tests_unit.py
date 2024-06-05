@@ -110,6 +110,43 @@ class ClientModelTest(TestCase):
         self.assertEqual(Client.objects.count(), initial_count - 1)
         self.assertRedirects(response, reverse('clients_repo'))
 
+    def test_create_client_with_error_name(self):
+        """
+        Verifica que se no se pueda crear un cliente con un error
+        """
+        saved, errors = Client.save_client(
+            {
+                "name": "Juan Sebastian Veron 7",
+                "phone": "221555232",
+                "address": "13 y 44",
+                "email": "brujita75@hotmail.com",
+            },
+        )
+        self.assertFalse(saved)
+        self.assertEqual(errors["name"], "El nombre no puede contener números.")
+
+    def test_update_client_with_error_name(self):
+        """
+        Verifica que no se pueda editar un cliente con un nombre que contenga numeros.
+        """
+        Client.save_client(
+            {
+                "name": "Juan Sebastian Veron",
+                "phone": "221555232",
+                "address": "13 y 44",
+                "email": "brujita75@hotmail.com",
+            },
+        )
+        client = Client.objects.get(pk=1)
+
+        self.assertEqual(client.name, "Juan Sebastian Veron")
+
+        client.update_client({"cliente": "JSV7"})
+
+        client_updated = Client.objects.get(pk=1)
+
+        self.assertEqual(client_updated.name, "Juan Sebastian Veron")
+
     def test_cant_update_client_with_characters_in_phone_input(self):
         """
         Prueba que no se pueda actualizar un cliente con caracteres no numéricos en el teléfono.
