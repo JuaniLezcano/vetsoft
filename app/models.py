@@ -343,7 +343,7 @@ def validate_pet(data):
                 errors["birthday"] = "La fecha de nacimiento no puede ser posterior al día actual."
         except ValueError:
             errors["birthday"] = "Formato de fecha invalido. Utilice el formato YYYY-MM-DD"
-            
+
     return errors
 
 class Pet(models.Model):
@@ -383,7 +383,7 @@ class Pet(models.Model):
         self.breed = pet_data.get("breed", self.breed)
 
         birthday_str = pet_data.get("birthday", None)
-        
+
         if birthday_str:
             try:
                 birthday_date = datetime.strptime(birthday_str, "%Y-%m-%d").date()

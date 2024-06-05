@@ -456,10 +456,10 @@ class PetModelTest(TestCase):
         self.assertEqual(pet.birthday, date(2021, 1, 1))  # Comparar objetos datetime.date
 
         pet.update_pet({"birthday": "2028-10-10"})
-        
+
         pet_updated = Pet.objects.get(pk=1)
         self.assertEqual(pet_updated.birthday, date(2021, 1, 1))
-    
+
     def test_update_pet_with_invalid_birthday(self):
         pet_birthday = (date(2021, 1, 1)).strftime("%Y-%m-%d")
         Pet.save_pet(
@@ -474,11 +474,11 @@ class PetModelTest(TestCase):
         self.assertEqual(pet.birthday, date(2021, 1, 1))  # Comparar objetos datetime.date
 
         pet.update_pet({"birthday": "aaaaaa"})
-        
+
         pet_updated = Pet.objects.get(pk=1)
         self.assertEqual(pet_updated.birthday, date(2021, 1, 1))
-    
-    
+
+
 class VeterinaryModelTest(TestCase):
     def test_can_create_and_get_vet(self):
         Veterinary.save_veterinary(
