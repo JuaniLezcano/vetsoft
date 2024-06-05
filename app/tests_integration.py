@@ -241,10 +241,10 @@ class ClientsTest(TestCase):
             reverse("clients_form"),
             data={
                 "id": client.id,
+                "name": "Benjamin Peres",
                 "phone": "54123asd",
             },
         )
-
         editedClient = Client.objects.get(pk=client.id)
 
         self.assertEqual(str(editedClient.phone), client.phone)
