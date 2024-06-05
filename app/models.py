@@ -1,8 +1,8 @@
+import re
 from datetime import date, datetime
 
 from django.db import models
-from datetime import datetime, date
-import re
+
 
 def validate_client(data):
     """

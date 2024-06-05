@@ -128,7 +128,7 @@ class ClientsTest(TestCase):
             },
         )
         self.assertContains(response, "Por favor ingrese un email valido")
-    
+
     def test_validation_format_vet(self):
         """
         Valido que el formato sea el correcto, en caso de no serlo da un error
