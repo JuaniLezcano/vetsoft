@@ -1,12 +1,11 @@
 import os
+from datetime import date
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-from playwright.sync_api import sync_playwright, expect, Browser
-
 from django.urls import reverse
+from playwright.sync_api import Browser, expect, sync_playwright
 
-from app.models import Client, Product, Pet, Med
-from datetime import date
+from app.models import Client, Med, Pet, Product
 
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 playwright = sync_playwright().start()
@@ -490,12 +489,12 @@ class PetCreateEditTestCase(PlaywrightTestCase):
         expect(self.page.get_by_label("Nombre")).to_have_value("Paco")
         breed_select = self.page.get_by_label("Raza")
         expect(breed_select).to_have_value("Perro")
-        expect(self.page.get_by_label("Nacimiento")).to_have_value("")
+        expect(self.page.get_by_label("Nacimiento")).to_have_value("2008-05-10")
 
         self.page.evaluate("document.querySelector('input[name=birthday]').value = '2028-05-10'")
         self.page.get_by_role("button", name="Guardar").click()
         expect(self.page.get_by_label("Nombre")).to_have_value("Paco")
         breed_select = self.page.get_by_label("Raza")
         expect(breed_select).to_have_value("Perro")
-        expect(self.page.get_by_label("Nacimiento")).to_have_value("2028-05-10")
+        expect(self.page.get_by_label("Nacimiento")).to_have_value("")
         expect(self.page.get_by_text("La fecha de nacimiento no puede ser posterior al día actual."))

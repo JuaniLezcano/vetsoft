@@ -1,7 +1,9 @@
-from django.shortcuts import render, redirect, reverse, get_object_or_404
-from .models import Client, Product , Med, Provider, Veterinary, Pet
+
 from django.contrib import messages
-from datetime import date, datetime
+from django.shortcuts import get_object_or_404, redirect, render, reverse
+
+from .models import Client, Med, Pet, Product, Provider, Veterinary
+
 
 def home(request):
     """
@@ -126,29 +128,22 @@ def pets_form(request, id=None):
         HttpResponse: Una respuesta HTTP que renderiza el template 'form.html' con el formulario de mascotas.
     """
     breeds = dict(Pet.Breed.choices)
+
     if request.method == "POST":
         pet_id = request.POST.get("id", "")
         errors = {}
         saved = True
-        birthday = request.POST.get("birthday")
 
         if pet_id == "":
             saved, errors = Pet.save_pet(request.POST)
         else:
             pet = get_object_or_404(Pet, pk=pet_id)
-            pet.update_pet(request.POST)
-        if birthday:
-            try:
-                birthday_format = datetime.strptime(birthday, "%Y-%m-%d").date()
-                if (birthday_format > date.today()):
-                    saved = False
-                    errors["birthday"] = "La fecha de nacimiento no puede ser posterior al día actual."
-            except ValueError:
-                errors["birthday"] = "Formato de fecha invalido. Utilice el formato YYYY-MM-DD"
+            saved, errors = pet.update_pet(request.POST)
 
         if saved:
-            return redirect(reverse("pets_repo"))
+            return redirect(reverse("pets_repo"))  # Redireccionar si se guarda con éxito
 
+        # Pasar los errores y datos del formulario en caso de fallo
         return render(
             request, "pets/form.html", {"errors": errors, "pet": request.POST, "breeds": breeds},
         )
