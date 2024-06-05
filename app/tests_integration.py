@@ -37,7 +37,7 @@ class ClientsTest(TestCase):
         self.assertEqual(len(clients), 1)
 
         self.assertEqual(clients[0].name, "Juan Sebastian Veron")
-        self.assertEqual(clients[0].phone, "54221555232")
+        self.assertEqual(str(clients[0].phone), "54221555232")
         self.assertEqual(clients[0].address, "13 y 44")
         self.assertEqual(clients[0].email, "brujita75@hotmail.com")
 
@@ -91,7 +91,7 @@ class ClientsTest(TestCase):
 
         editedClient = Client.objects.get(pk=client.id)
         self.assertEqual(editedClient.name, "Guido Carrillo")
-        self.assertEqual(editedClient.phone, client.phone)
+        self.assertEqual(str(editedClient.phone), client.phone)
         self.assertEqual(editedClient.address, client.address)
         self.assertEqual(editedClient.email, client.email)
 
@@ -126,7 +126,7 @@ class ClientsTest(TestCase):
 
         editedClient = Client.objects.get(pk=client.id)
         
-        self.assertEqual(editedClient.phone, client.phone)
+        self.assertEqual(str(editedClient.phone), client.phone)
         
 class ProvidersTest(TestCase):
     def test_can_create_client(self):
