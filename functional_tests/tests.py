@@ -481,6 +481,33 @@ class MedicineRepoTestCase(PlaywrightTestCase):
 
         expect(self.page.get_by_text("Paracetamoldog")).not_to_be_visible()
 
+
+    def test_should_validate_medicine_dose(self):
+        """
+        Verifica la validación de la dosis de un medicamento en el formulario.
+
+        Pasos:
+        1. Navega al formulario de medicamentos.
+        2. Llena el formulario con una dosis inválida (0).
+        3. Intenta guardar el formulario.
+        4. Verifica que se muestre el mensaje de error correspondiente.
+
+        Resultado esperado:
+        - El mensaje "La dosis debe estar entre 1 y 10" es visible.
+        """
+        self.page.goto(f"{self.live_server_url}{reverse('meds_form')}")
+
+        expect(self.page.get_by_role("form")).to_be_visible()
+
+        # Probar con una dosis menor a 1
+        self.page.get_by_label("Nombre").fill("Paracetamoldog")
+        self.page.get_by_label("Descripcion").fill("Este medicamento es para vomitos caninos")
+        self.page.get_by_label("Dosis").fill("0")
+        self.page.get_by_role("button", name="Guardar").click()
+
+        expect(self.page.get_by_text("La dosis debe estar entre 1 y 10")).to_be_visible()
+
+
 class productCreateEditTestCase(PlaywrightTestCase):
     """
     Clase de caso de prueba para probar la creación y edición de productos.

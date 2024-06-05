@@ -300,14 +300,57 @@ class MedicineModelTest(TestCase):
             },
         )
         medicine = Med.objects.get(pk=1)
-
         self.assertEqual(medicine.dose, 8)
-
         medicine.update_med({"dose": ""})
-
         medicine_updated = Med.objects.get(pk=1)
-
         self.assertEqual(medicine_updated.dose, 8)
+
+    def test_can_create_with_invalid_dosis(self):
+        """
+        Verifica que un medicamento con dosis inválida (18) no se guarde.
+
+        Pasos:
+        1. Llama a `save_med` con dosis 18.
+        2. Verifica que no haya medicamentos guardados.
+
+        Resultado esperado:
+        - `medicines` debe tener longitud 0.
+        """
+        Med.save_med(
+            {
+                "name": "Paracetamoldog",
+                "desc": "Este medicamento es para vomitos caninos",
+                "dose": 18,
+            },
+        )
+        medicines = Med.objects.all()
+        self.assertEqual(len(medicines), 0) #Si esto es así, significa que no guardó el medicamento porque tenía errores
+
+    def test_can_update_invalid_medicine_dosis(self):
+        """
+        Verifica que no se permita actualizar un medicamento con una dosis inválida (18).
+
+        Pasos:
+        1. Guarda un medicamento con dosis válida (1).
+        2. Verifica que la dosis inicial es 1.
+        3. Intenta actualizar la dosis a 18.
+        4. Verifica que la dosis no cambia.
+
+        Resultado esperado:
+        - La dosis del medicamento sigue siendo 1.
+        """
+        Med.save_med(
+            {
+                "name": "Paracetamoldog",
+                "desc": "Este medicamento es para vomitos caninos",
+                "dose": 1,
+            },
+        )
+        medicine = Med.objects.get(pk=1)
+        self.assertEqual(medicine.dose, 1)
+        medicine.update_med({"dose": 18})
+        medicine_updated = Med.objects.get(pk=1)
+        self.assertEqual(medicine_updated.dose, 1)
 
 class ProductModelTest(TestCase):
     """
