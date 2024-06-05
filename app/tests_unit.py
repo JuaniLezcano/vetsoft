@@ -441,6 +441,42 @@ class PetModelTest(TestCase):
         errors = validate_pet(pet_data)
         self.assertIn("birthday", errors)
         self.assertEqual(errors["birthday"], "La fecha de nacimiento no puede ser posterior al día actual.")
+
+    def test_update_pet_with_birthay_after_current_date(self):
+        pet_birthday = (date(2021, 1, 1)).strftime("%Y-%m-%d")
+        Pet.save_pet(
+            {
+                "name": "Paco",
+                "breed": "Perro",
+                "birthday": pet_birthday,
+            },
+        )
+
+        pet = Pet.objects.get(pk=1)
+        self.assertEqual(pet.birthday, date(2021, 1, 1))  # Comparar objetos datetime.date
+
+        pet.update_pet({"birthday": "2028-10-10"})
+        
+        pet_updated = Pet.objects.get(pk=1)
+        self.assertEqual(pet_updated.birthday, date(2021, 1, 1))
+    
+    def test_update_pet_with_invalid_birthday(self):
+        pet_birthday = (date(2021, 1, 1)).strftime("%Y-%m-%d")
+        Pet.save_pet(
+            {
+                "name": "Paco",
+                "breed": "Perro",
+                "birthday": pet_birthday,
+            },
+        )
+
+        pet = Pet.objects.get(pk=1)
+        self.assertEqual(pet.birthday, date(2021, 1, 1))  # Comparar objetos datetime.date
+
+        pet.update_pet({"birthday": "aaaaaa"})
+        
+        pet_updated = Pet.objects.get(pk=1)
+        self.assertEqual(pet_updated.birthday, date(2021, 1, 1))
     
     
 class VeterinaryModelTest(TestCase):
