@@ -38,7 +38,6 @@ class ClientsTest(TestCase):
         test_should_response_with_404_status_if_client_doesnt_exists: Verifica si se devuelve un código de estado 404 si se intenta acceder a la edición de un cliente que no existe.
         test_validation_invalid_email: Verifica si se muestra un mensaje de error al intentar crear un cliente con un correo electrónico inválido.
         test_edit_user_with_valid_data: Verifica si se puede editar un cliente existente con datos válidos.
-    
     """
     def test_repo_use_repo_template(self):
         response = self.client.get(reverse("clients_repo"))
@@ -139,7 +138,6 @@ class ProvidersTest(TestCase):
         test_repo_use_repo_template: Verifica si se está utilizando el template "providers/repository.html" en la vista del repositorio de proveedores.
         test_repo_display_all_providers: Verifica si se están mostrando todos los proveedores en la vista del repositorio de proveedores.
         test_form_use_form_template: Verifica si se está utilizando el template "providers/form.html" en la vista del formulario de proveedores.
-    
     """
     def test_can_create_client(self):
         response = self.client.post(
@@ -238,8 +236,6 @@ class MedicinesTest(TestCase):
         test_should_response_with_404_status_if_medicine_doesnt_exists: Verifica si se devuelve un estado de 404 si se intenta acceder a la edición de un medicamento que no existe.
         test_validation_invalid_dosis: Verifica si se muestra un mensaje de error al intentar crear un medicamento con una dosis inválida.
         test_edit_user_with_valid_data: Verifica si se puede editar un medicamento existente con datos válidos.
-    
-    
     """
     def test_repo_use_repo_template(self):
         response = self.client.get(reverse("meds_repo"))
@@ -324,16 +320,6 @@ class MedicinesTest(TestCase):
 
 
 class ProductsTest(TestCase):
-    def test_validation_errors_create_product(self):
-        response = self.client.post(
-            reverse("products_form"),
-            data={},
-        )
-        self.assertContains(response, "Por favor ingrese un nombre")
-        self.assertContains(response, "Por favor ingrese un tipo")
-        self.assertContains(response, "Por favor ingrese un precio")
-        self.assertContains(response, "Por favor ingrese un stock")
-
     """
     Clase de prueba para las vistas y funcionalidades relacionadas con los productos.
 
@@ -347,6 +333,15 @@ class ProductsTest(TestCase):
         test_update_product_with_negative_stock: Verifica si se muestra un mensaje de error al intentar actualizar un producto con un stock negativo.
 
     """
+    def test_validation_errors_create_product(self):
+        response = self.client.post(
+            reverse("products_form"),
+            data={},
+        )
+        self.assertContains(response, "Por favor ingrese un nombre")
+        self.assertContains(response, "Por favor ingrese un tipo")
+        self.assertContains(response, "Por favor ingrese un precio")
+        self.assertContains(response, "Por favor ingrese un stock")
     def test_can_create_product(self):
         response = self.client.post(
             reverse("products_form"),
@@ -575,6 +570,21 @@ class PetsTest(TestCase):
         self.assertContains(response, "Formato de fecha invalido. Utilice el formato YYYY-MM-DD")
 
 class VetsTest(TestCase):
+    """
+    Prueba para la creación y validación de registros de veterinarios.
+    Esta clase contiene pruebas para verificar el comportamiento del
+    formulario de creación de veterinarios. Se asegura de que se manejen
+    adecuadamente los errores de validación y que se pueda crear un
+    veterinario con datos correctos.
+    Métodos:
+    --------
+    test_validation_errors_create_vet():
+        Prueba que verifica que se muestran los mensajes de error
+        de validación cuando los datos necesarios no son proporcionados.
+    test_can_create_vet():
+        Prueba que verifica que se puede crear un registro de veterinario
+        con datos válidos y que el usuario es redirigido correctamente.
+    """
     def test_validation_errors_create_vet(self):
         response = self.client.post(
             reverse("veterinary_form"),

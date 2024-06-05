@@ -18,7 +18,7 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
     Clase base para pruebas utilizando Playwright.
 
     Esta clase proporciona configuraciones básicas para ejecutar pruebas utilizando
-    el framework Playwright. Configura un navegador web y proporciona métodos de 
+    el framework Playwright. Configura un navegador web y proporciona métodos de
     configuración y limpieza.
 
     Atributos de Clase:
@@ -33,8 +33,6 @@ class PlaywrightTestCase(StaticLiveServerTestCase):
     Métodos:
         setUp: Configura una nueva página del navegador antes de cada prueba.
         tearDown: Cierra la página del navegador después de cada prueba.
-
-    
     """
     @classmethod
     def setUpClass(cls):
@@ -62,7 +60,6 @@ class HomeTestCase(PlaywrightTestCase):
     Clase de caso de prueba para probar la funcionalidad de la página de inicio.
 
     Esta clase incluye métodos de prueba para verificar la presencia de la barra de navegación con enlaces y tarjetas de inicio con enlaces.
-    
     """
     def test_should_have_navbar_with_links(self):
         self.page.goto(self.live_server_url)
@@ -96,11 +93,9 @@ class ClientsRepoTestCase(PlaywrightTestCase):
     Esta clase incluye métodos de prueba para verificar si se muestra un mensaje si la tabla está vacía,
     mostrar datos de clientes, mostrar la acción para agregar un cliente, mostrar la acción para editar un cliente
     y mostrar la acción para eliminar un cliente.
-    
     """
     def test_should_show_message_if_table_is_empty(self):
         self.page.goto(f"{self.live_server_url}{reverse('clients_repo')}")
-
         expect(self.page.get_by_text("No existen clientes")).to_be_visible()
 
     def test_should_show_clients_data(self):
@@ -401,13 +396,10 @@ class productCreateEditTestCase(PlaywrightTestCase):
     - Crear un nuevo producto.
     - Aumentar el stock de un producto al hacer clic en un botón.
     - Verificar si se muestra un error al intentar editar un producto con un stock negativo.
-    
     """
     def test_should_be_able_to_create_a_new_product(self):
         self.page.goto(f"{self.live_server_url}{reverse('products_form')}")
-
         expect(self.page.get_by_role("form")).to_be_visible()
-
         self.page.get_by_label("Nombre").fill("Lavandina")
         self.page.get_by_label("Tipo").fill("Limpieza")
         self.page.get_by_label("Precio").fill("100")
@@ -477,7 +469,6 @@ class PetCreateEditTestCase(PlaywrightTestCase):
     - Verificar si se muestran errores si el formulario de mascotas es inválido.
     - Editar una mascota existente.
     - Verificar si se muestra un error al intentar editar una mascota con una fecha de nacimiento futura.
-    
     """
     def test_should_show_message_if_table_is_empty(self):
         self.page.goto(f"{self.live_server_url}{reverse('clients_repo')}")
@@ -485,9 +476,7 @@ class PetCreateEditTestCase(PlaywrightTestCase):
 
     def test_should_be_able_to_create_a_new_pet(self):
         self.page.goto(f"{self.live_server_url}{reverse('pets_form')}")
-
         expect(self.page.get_by_role("form")).to_be_visible()
-
         self.page.get_by_label("Nombre").fill("Benita")
         self.page.get_by_label("Raza").select_option("Perro")
         self.page.get_by_label("Nacimiento").fill("2021-01-01")

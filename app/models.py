@@ -191,8 +191,8 @@ class Client(models.Model):
         __str__: Método para representar el objeto cliente como una cadena.
         save_client: Método de clase para guardar un nuevo cliente en la base de datos.
         update_client: Método para actualizar la información de un cliente existente en la base de datos.
-    
     """
+
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=15)
     email = models.EmailField()
@@ -243,7 +243,6 @@ class Product(models.Model):
         __str__: Método para representar el objeto producto como una cadena.
         save_product: Método de clase para guardar un nuevo producto en la base de datos.
         update_product: Método para actualizar la información de un producto existente en la base de datos.
-    
     """
     name = models.CharField(max_length=100)
     type = models.CharField(max_length=50)
@@ -301,7 +300,6 @@ class Provider(models.Model):
         __str__: Método para representar el objeto proveedor como una cadena.
         save_provider: Método de clase para guardar un nuevo proveedor en la base de datos.
         update_provider: Método para actualizar la información de un proveedor existente en la base de datos.
-    
     """
     name = models.CharField(max_length=100)
     email = models.EmailField()
@@ -503,9 +501,7 @@ class Med(models.Model):
         __str__: Método para representar el objeto medicamento como una cadena.
         save_med: Método de clase para guardar un nuevo medicamento en la base de datos.
         update_med: Método para actualizar la información de un medicamento existente en la base de datos.
-    
-    
-    """
+        """
     name = models.CharField(max_length=100)
     desc = models.CharField(max_length=50)
     dose = models.FloatField()
