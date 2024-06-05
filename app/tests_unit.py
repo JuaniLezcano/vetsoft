@@ -2,8 +2,18 @@ from datetime import date, timedelta
 
 from django.test import TestCase
 from django.urls import reverse
-from app.models import Client, Product, Pet, Med, validate_pet, Provider, Veterinary, validate_veterinary , validate_provider
-from datetime import date, timedelta
+
+from app.models import (
+    Client,
+    Med,
+    Pet,
+    Product,
+    Provider,
+    Veterinary,
+    validate_pet,
+    validate_provider,
+    validate_veterinary,
+)
 
 
 class ClientModelTest(TestCase):
@@ -19,6 +29,9 @@ class ClientModelTest(TestCase):
         test_update_client_with_error: Verifica si el cliente no se actualiza cuando se proporciona un valor de teléfono vacío.
     """
     def test_can_create_and_get_client(self):
+        """
+        Verifica que se pueda crear y obtener un cliente
+        """
         Client.save_client(
             {
                 "name": "Juan Sebastian Veron",
@@ -36,6 +49,9 @@ class ClientModelTest(TestCase):
         self.assertEqual(clients[0].email, "brujita75@hotmail.com")
 
     def test_can_update_client(self):
+        """
+        Verifica que se pueda actualizar los datos del clietne
+        """
         Client.save_client(
             {
                 "name": "Juan Sebastian Veron",
@@ -55,6 +71,9 @@ class ClientModelTest(TestCase):
         self.assertEqual(client_updated.phone, "221555233")
 
     def test_update_client_with_error(self):
+        """
+        Verifica que al momento de actualizar los clientes, no haya datos erroneos.
+        """
         Client.save_client(
             {
                 "name": "Juan Sebastian Veron",
@@ -74,6 +93,9 @@ class ClientModelTest(TestCase):
         self.assertEqual(client_updated.phone, "221555232")
 
     def test_clients_delete(self):
+        """
+        Verifica que se puede eliminar un cliente
+        """
         Client.save_client(
             {
                 "name": "Juan Sebastian Veron",
@@ -101,6 +123,9 @@ class ProviderModelTest(TestCase):
         test_update_provider_with_error: Verifica si el proveedor no se actualiza cuando se proporciona una dirección vacía.
     """
     def test_can_create_and_get_provider(self):
+        """
+        Verifica que se pueda crear y obtener un proveedor
+        """
         Provider.save_provider(
             {
                 "name": "Farmacity S.A",
@@ -115,8 +140,11 @@ class ProviderModelTest(TestCase):
         self.assertEqual(providers[0].name, "Farmacity S.A")
         self.assertEqual(providers[0].email, "moltito@hotmail.com")
         self.assertEqual(providers[0].address, "Rio negro 2265")
-    
+
     def test_address_not_null(self):
+        """
+        Verifica que el campo direccion tenga un valor.
+        """
         data = {"name": "Farmacity S.A",
                 "email": "moltito@hotmail.com",
                 "address": "",}
@@ -127,6 +155,9 @@ class ProviderModelTest(TestCase):
         self.assertDictEqual(expected_errors, errors)
 
     def test_provider_delete(self):
+        """
+        Verifica que se pueda borrar un proveedor
+        """
         Provider.save_provider(
             {
                 "name": "Farmacity S.A",
@@ -141,6 +172,9 @@ class ProviderModelTest(TestCase):
         self.assertRedirects(response, reverse('providers_repo'))
 
     def test_can_update_provider(self):
+        """
+        Verifica que se pueda actualizar los proveedores
+        """
         Provider.save_provider(
             {
                 "name": "Farmacity S.A",
@@ -159,6 +193,9 @@ class ProviderModelTest(TestCase):
         self.assertEqual(provider_updated.address, "Cardenal pironio 2265")
 
     def test_update_provider_with_error(self):
+        """
+        Verifica que al actualizar un proveedor, no permita actualizar con datos erroneos.
+        """
         Provider.save_provider(
             {
                 "name": "Farmacity S.A",
@@ -190,6 +227,9 @@ class MedicineModelTest(TestCase):
         test_update_medicine_with_error: Verifica si el medicamento no se actualiza cuando se proporciona una dosis vacía.
     """
     def test_can_create_and_get_medicine(self):
+        """
+        Verifica que se pueda crear y obtener una medicina
+        """
         Med.save_med(
             {
                 "name": "Paracetamoldog",
@@ -205,6 +245,9 @@ class MedicineModelTest(TestCase):
         self.assertEqual(medicines[0].dose, 8)
 
     def test_med_delete(self):
+        """
+        Verifica que se pueda eliminar una medicina
+        """
         Med.save_med(
             {
                 "name": "Paracetamoldog",
@@ -219,6 +262,9 @@ class MedicineModelTest(TestCase):
         self.assertRedirects(response, reverse('meds_repo'))
 
     def test_can_update_medicine(self):
+        """
+        Verifica que se pueda actualizar una medicina
+        """
         Med.save_med(
             {
                 "name": "Paracetamoldog",
@@ -243,6 +289,9 @@ class MedicineModelTest(TestCase):
         self.assertEqual(medicine_updated.dose, 7)
 
     def test_update_medicine_with_error(self):
+        """
+        Verifica que cuando se actualize una medicina, no se actualize con datos erroneos.
+        """
         Med.save_med(
             {
                 "name": "Paracetamoldog",
@@ -275,6 +324,9 @@ class ProductModelTest(TestCase):
         test_update_product_stock_with_error_empty_value: Verifica que el stock del producto no se actualice si se proporciona un valor vacío.
     """
     def test_can_create_and_get_product_with_stock(self):
+        """
+        Verifica que se pueda crear un producto con stock y recuperarlo correctamente de la base de datos.
+        """
         Product.save_product(
             {
                 "name": "Lavandina",
@@ -292,6 +344,9 @@ class ProductModelTest(TestCase):
         self.assertEqual(products[0].stock, 50)
 
     def test_can_update_product_stock(self):
+        """
+        Verifica que se pueda actualizar el stock de un producto.
+        """
         Product.save_product(
             {
                 "name": "Lavandina",
@@ -307,6 +362,9 @@ class ProductModelTest(TestCase):
         self.assertEqual(product_updated.stock, 75)
 
     def test_product_delete(self):
+        """
+        Verifica que se eliminar un producto
+        """
         Product.save_product(
             {
                 "name": "Lavandina",
@@ -322,6 +380,9 @@ class ProductModelTest(TestCase):
         self.assertRedirects(response, reverse('products_repo'))
 
     def test_update_product_stock_with_error_negative_value(self):
+        """
+        Verifica que al momento de actualizar un producto, no permita que este se actualize con un valor negativo en el atributo stock.
+        """
         Product.save_product(
             {
                 "name": "Lavandina",
@@ -337,6 +398,9 @@ class ProductModelTest(TestCase):
         self.assertEqual(product_updated.stock, 50)
 
     def test_update_product_stock_with_error_string_value(self):
+        """
+        Verifica que al momento de actualizar un producto, no permita que este se actualize con un valor de tipo string en el atributo stock.
+        """
         Product.save_product(
             {
                 "name": "Lavandina",
@@ -352,6 +416,9 @@ class ProductModelTest(TestCase):
         self.assertEqual(product_updated.stock, 50)
 
     def test_update_product_stock_with_error_empty_value(self):
+        """
+        Verifica que al momento de actualizar un producto, no permita que este se actualize con un valor nulo en el atributo stock.
+        """
         Product.save_product(
             {
                 "name": "Lavandina",
@@ -367,6 +434,9 @@ class ProductModelTest(TestCase):
         self.assertEqual(product_updated.stock, 50)
 
     def test_increment_stock(self):
+        """
+        Verifica que el atributo stock pueda incrementarse.
+        """
         Product.save_product(
             {
                 "name": "Lavandina",
@@ -383,6 +453,9 @@ class ProductModelTest(TestCase):
         self.assertRedirects(response, reverse('products_repo'))
 
     def test_decrement_stock(self):
+        """
+        Verifica que el atributo stock pueda decrementarse.
+        """
         Product.save_product(
             {
                 "name": "Lavandina",
@@ -399,6 +472,9 @@ class ProductModelTest(TestCase):
         self.assertRedirects(response, reverse('products_repo'))
 
     def test_decrement_stock_zero(self):
+        """
+        Verifica que el atributo stock no pueda decrementarse mas alla del valor 0.
+        """
         Product.save_product(
             {
                 "name": "Lavandina",
@@ -428,6 +504,9 @@ class PetModelTest(TestCase):
         test_cant_invalidate_birthday: Verifica que no se pueda crear una mascota con una fecha de nacimiento futura.
     """
     def test_can_create_pet_with_breed_options(self):
+        """
+        Verifica que se cree una mascota correctamente con los valores del atributo breed correspondientes.
+        """
         pet_birthday = (date(2021, 1, 1)).strftime("%Y-%m-%d")
         Pet.save_pet(
             {
@@ -444,6 +523,9 @@ class PetModelTest(TestCase):
         self.assertEqual(pets[0].birthday, date(2021, 1, 1))
 
     def test_can_update_pet_breed(self):
+        """
+        Verifica que el atributo breed se actualize con un nuevo valor de manera correcta.
+        """
         pet_birthday = (date(2021, 1, 1)).strftime("%Y-%m-%d")
         Pet.save_pet(
             {
@@ -460,6 +542,9 @@ class PetModelTest(TestCase):
         self.assertEqual(pet_updated.breed, "Gato")
 
     def test_pet_delete(self):
+        """
+        Verifica que se pueda eliminar una mascota
+        """
         pet_birthday = (date(2021, 1, 1)).strftime("%Y-%m-%d")
         Pet.save_pet(
             {
@@ -475,6 +560,9 @@ class PetModelTest(TestCase):
         self.assertRedirects(response, reverse('pets_repo'))
 
     def test_update_pet_with_error(self):
+        """
+        Verifica que al actualizar los datos de una mascota, no se pueda actualizar con datos erroneos.-
+        """
         pet_birthday = (date(2021, 1, 1)).strftime("%Y-%m-%d")
         Pet.save_pet(
             {
@@ -491,6 +579,9 @@ class PetModelTest(TestCase):
         self.assertEqual(pet_updated.breed, "Perro")
 
     def test_cant_invalidate_birthday(self):
+        """
+        Verifica que el atributo birthday no pueda actualizarse con una fecha invalida.
+        """
         future_birthday = (date.today() + timedelta(days=1)).strftime("%Y-%m-%d")
         pet_data = {
             "name": "Paco",
@@ -502,6 +593,9 @@ class PetModelTest(TestCase):
         self.assertEqual(errors["birthday"], "La fecha de nacimiento no puede ser posterior al día actual.")
 
     def test_update_pet_with_birthay_after_current_date(self):
+        """
+        Verifico que cuando se actualiza la fecha cumpla con la restriccion de tiempo.
+        """
         pet_birthday = (date(2021, 1, 1)).strftime("%Y-%m-%d")
         Pet.save_pet(
             {
@@ -520,6 +614,9 @@ class PetModelTest(TestCase):
         self.assertEqual(pet_updated.birthday, date(2021, 1, 1))
 
     def test_update_pet_with_invalid_birthday(self):
+        """
+        Verifica que la fecha no sea invalida
+        """
         pet_birthday = (date(2021, 1, 1)).strftime("%Y-%m-%d")
         Pet.save_pet(
             {
@@ -546,6 +643,9 @@ class VeterinaryModelTest(TestCase):
     los datos se almacenen y se recuperen correctamente desde la base de datos.
     """
     def test_can_create_and_get_vet(self):
+        """
+        Verifica que se pueda crear y obtener un nuevo veterinario
+        """
         Veterinary.save_veterinary(
             {
                 "name": "Jose Rodriguez",
@@ -561,6 +661,9 @@ class VeterinaryModelTest(TestCase):
         self.assertEqual(veterinaries[0].email, "joser@hotmail.com")
 
     def test_vet_delete(self):
+        """
+        Verifica que se puede eliminar un veterinario ya creado
+        """
         Veterinary.save_veterinary(
             {
                 "name": "Jose Rodriguez",
@@ -575,6 +678,9 @@ class VeterinaryModelTest(TestCase):
         self.assertRedirects(response, reverse('veterinary_repo'))
 
     def test_validate_veterinary_empty_data(self):
+        """
+        Verifica que al momento de crear un nuevo veterinario no se cree con valores nulos
+        """
         data = {}
         errors = validate_veterinary(data)
         expected_errors = {
@@ -585,6 +691,9 @@ class VeterinaryModelTest(TestCase):
         self.assertDictEqual(expected_errors, errors)
 
     def test_validate_wrong_email(self):
+        """
+        Verifica que el atributo email del veterinario este en el formato correcto
+        """
         data = {"name": "Jose Rodriguez",
                 "phone": "2214504505",
                 "email": "joserhotmail.com",}
@@ -595,6 +704,9 @@ class VeterinaryModelTest(TestCase):
         self.assertDictEqual(expected_errors, errors)
 
     def test_cant_update_veterinary_with_error(self):
+        """
+        Verifica que se pueda actualizar un veterinario sin datos erroneos.
+        """
         Veterinary.save_veterinary(
             {
                 "name": "Jose Rodriguez",
