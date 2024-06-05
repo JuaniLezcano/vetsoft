@@ -140,10 +140,23 @@ class Client(models.Model):
         return True, None
 
     def update_client(self, client_data):
+        pattern_email = r'^[a-zA-Z0-9._%+-]+@vetsoft\.com$'
+        errors = {}
         self.name = client_data.get("name", "") or self.name
-        self.email = client_data.get("email", "") or self.email
         self.phone = client_data.get("phone", "") or self.phone
         self.address = client_data.get("address", "") or self.address
+        email = client_data.get("email", "")
+        if email:
+            try:
+                if not re.match(pattern_email, email):
+                    errors["email"] = "El email debe terminar con @vetsoft.com y contener algo antes"
+                    self.email = Client.objects.get(pk=self.pk).email
+                    return False, errors
+                self.email= email
+            except ValueError:
+                errors["email"] = "Formato de email inválido.o"
+                self.email = Client.objects.get(pk=self.pk).email
+                return False, errors
         self.save()
 
 
