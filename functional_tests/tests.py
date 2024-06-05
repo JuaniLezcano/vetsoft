@@ -1,12 +1,11 @@
 import os
+from datetime import date
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-from playwright.sync_api import sync_playwright, expect, Browser
-
 from django.urls import reverse
+from playwright.sync_api import Browser, expect, sync_playwright
 
-from app.models import Client, Product, Pet, Med
-from datetime import date
+from app.models import Client, Med, Pet, Product
 
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 playwright = sync_playwright().start()
@@ -422,7 +421,7 @@ class productCreateEditTestCase(PlaywrightTestCase):
         expect(self.page.get_by_text("50")).to_be_visible()
 
     def test_increase_stock_product_by_touching_button(self):
-        product = Product.objects.create(
+        product = Product.objects.create( # noqa: F841
             name="Lavandina",
             type="Limpieza",
             price=100,
@@ -441,7 +440,7 @@ class productCreateEditTestCase(PlaywrightTestCase):
         expect(self.page.get_by_text("51")).to_be_visible()
 
     def test_edit_form_should_be_able_to_throw_an_error_if_negative_stock(self):
-        product = Product.objects.create(
+        product = Product.objects.create( # noqa: F841
             name="Lavandina",
             type="Limpieza",
             price=100,
@@ -498,7 +497,7 @@ class PetCreateEditTestCase(PlaywrightTestCase):
         expect(self.page.get_by_text("Benita")).to_be_visible()
         expect(self.page.get_by_text("Perro")).to_be_visible()
         expect(self.page.get_by_text("Jan. 1, 2021")).to_be_visible()
-    
+
     def test_should_view_errors_if_form_pet_is_invalid(self):
         self.page.goto(f"{self.live_server_url}{reverse('pets_form')}")
 
@@ -519,7 +518,7 @@ class PetCreateEditTestCase(PlaywrightTestCase):
         expect(self.page.get_by_text("Por favor ingrese un nombre")).not_to_be_visible()
         expect(self.page.get_by_text("Por favor ingrese una raza")).to_be_visible()
         expect(self.page.get_by_text("Por favor ingrese una fecha de nacimiento")).not_to_be_visible()
-    
+
     def test_should_be_able_to_edit_a_pet(self):
         pet_birthday = (date(2021, 1, 1)).strftime("%Y-%m-%d")
         pet = Pet.objects.create(
@@ -549,7 +548,7 @@ class PetCreateEditTestCase(PlaywrightTestCase):
         expect(edit_action).to_have_attribute("href", reverse("pets_edit", kwargs={"id": pet.id}))
 
     def test_edit_form_should_be_able_to_throw_an_error_if(self):
-        pet = Pet.objects.create(
+        pet = Pet.objects.create( # noqa: F841
             name="Paco",
             breed="Perro",
             birthday="2008-05-10",
@@ -564,12 +563,12 @@ class PetCreateEditTestCase(PlaywrightTestCase):
         expect(self.page.get_by_label("Nombre")).to_have_value("Paco")
         breed_select = self.page.get_by_label("Raza")
         expect(breed_select).to_have_value("Perro")
-        expect(self.page.get_by_label("Nacimiento")).to_have_value("")
+        expect(self.page.get_by_label("Nacimiento")).to_have_value("2008-05-10")
 
         self.page.evaluate("document.querySelector('input[name=birthday]').value = '2028-05-10'")
         self.page.get_by_role("button", name="Guardar").click()
         expect(self.page.get_by_label("Nombre")).to_have_value("Paco")
         breed_select = self.page.get_by_label("Raza")
         expect(breed_select).to_have_value("Perro")
-        expect(self.page.get_by_label("Nacimiento")).to_have_value("2028-05-10")
+        expect(self.page.get_by_label("Nacimiento")).to_have_value("")
         expect(self.page.get_by_text("La fecha de nacimiento no puede ser posterior al día actual."))
