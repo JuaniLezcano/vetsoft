@@ -71,8 +71,8 @@ class ClientModelTest(TestCase):
 
         client_updated = Client.objects.get(pk=1)
 
-        self.assertEqual(client_updated.email, "brujita75@vetsoft.com")    
-        
+        self.assertEqual(client_updated.email, "brujita75@vetsoft.com")
+
 
     def test_can_update_client(self):
         """
