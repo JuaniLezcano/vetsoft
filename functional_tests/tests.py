@@ -357,6 +357,46 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
             "href", reverse("clients_edit", kwargs={"id": client.id}),
         )
 
+    def test_should_not_be_able_to_create_a_client_with_number_in_name(self):
+        """
+        Verifica que no se pueda crear un cliente con numeros en el nombre
+        """
+        self.page.goto(f"{self.live_server_url}{reverse('clients_form')}")
+
+        expect(self.page.get_by_role("form")).to_be_visible()
+
+        self.page.get_by_label("Nombre").fill("Juan Sebastián Veron 7")
+        self.page.get_by_label("Teléfono").fill("221555232")
+        self.page.get_by_label("Email").fill("brujita75@hotmail.com")
+        self.page.get_by_label("Dirección").fill("13 y 44")
+
+        self.page.get_by_role("button", name="Guardar").click()
+
+        expect(self.page.get_by_text("El nombre no puede contener números.")).to_be_visible()
+
+    def test_should_not_be_able_to_edit_a_client_with_number_in_name(self):
+        """
+        Verifica que no se pueda editar un nombre con numeros en un cliente.
+        """
+        client = Client.objects.create(
+            name="Juan Sebastián Veron",
+            address="13 y 44",
+            phone="221555232",
+            email="brujita75@hotmail.com",
+        )
+
+        path = reverse("clients_edit", kwargs={"id": client.id})
+        self.page.goto(f"{self.live_server_url}{path}")
+
+        self.page.get_by_label("Nombre").fill("Guido Carrillo 9")
+        self.page.get_by_label("Teléfono").fill("221232555")
+        self.page.get_by_label("Email").fill("goleador@gmail.com")
+        self.page.get_by_label("Dirección").fill("1 y 57")
+
+        self.page.get_by_role("button", name="Guardar").click()
+
+        expect(self.page.get_by_text("El nombre no puede contener números.")).to_be_visible()
+
 class MedicineRepoTestCase(PlaywrightTestCase):
     """
     Clase de caso de prueba para probar la funcionalidad del repositorio de medicamentos.

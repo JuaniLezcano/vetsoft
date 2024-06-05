@@ -27,6 +27,8 @@
                         name="name"
                         value="{{client.name}}"
                         class="form-control"
+                        pattern="[A-Za-z\s]*"
+                        title="El nombre solo puede contener letras y espacios."
                         required/>
 
                     {% if errors.name %}
