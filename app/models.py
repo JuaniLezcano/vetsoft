@@ -1,3 +1,4 @@
+import re
 from datetime import date, datetime
 
 from django.db import models
@@ -28,6 +29,7 @@ def validate_client(data):
     name = data.get("name", "")
     phone = data.get("phone", "")
     email = data.get("email", "")
+    pattern_email = r'^[a-zA-Z0-9._%+-]+@vetsoft\.com$'
 
     if name == "":
         errors["name"] = "Por favor ingrese un nombre"
@@ -41,9 +43,12 @@ def validate_client(data):
         errors["phone"] = "Por favor ingrese un numero de telefono valido, solo digitos"
     if email == "":
         errors["email"] = "Por favor ingrese un email"
-    elif email.count("@") == 0:
-        errors["email"] = "Por favor ingrese un email valido"
-
+    else:
+        try:
+            if not re.match(pattern_email, email):
+                 errors["email"] =("El email debe terminar con @vetsoft.com y contener algo antes")
+        except ValueError:
+            errors["email"] = "Formato de email inválido."
     return errors
 
 def validate_provider(data):
@@ -71,7 +76,7 @@ def validate_provider(data):
         errors["address"] = "Por favor ingrese una direccion"
 
     if email == "":
-        errors["email"] = "Por favor ingrese un email"
+        errors["email"] = "Por favor ingrese un email valido"
     elif email.count("@") == 0:
         errors["email"] = "Por favor ingrese un email valido"
 
@@ -235,12 +240,24 @@ class Client(models.Model):
         """
         Metodo para actualizar los clientes con nuevos datos
         """
+        pattern_email = r'^[a-zA-Z0-9._%+-]+@vetsoft\.com$'
+        errors = {}
         self.name = client_data.get("name", "") or self.name
-        self.email = client_data.get("email", "") or self.email
         if (client_data.get("phone", "").isdigit()):
             self.phone = client_data.get("phone", "") or self.phone
         self.address = client_data.get("address", "") or self.address
-
+        email = client_data.get("email", "")
+        if email:
+            try:
+                if not re.match(pattern_email, email):
+                    errors["email"] = "El email debe terminar con @vetsoft.com y contener algo antes"
+                    self.email = Client.objects.get(pk=self.pk).email
+                    return False, errors
+                self.email= email
+            except ValueError:
+                errors["email"] = "Formato de email inválido.o"
+                self.email = Client.objects.get(pk=self.pk).email
+                return False, errors
         self.save()
 
 

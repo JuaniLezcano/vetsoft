@@ -37,7 +37,7 @@ class ClientModelTest(TestCase):
                 "name": "Juan Sebastian Veron",
                 "phone": "5454221555232",
                 "address": "13 y 44",
-                "email": "brujita75@hotmail.com",
+                "email": "brujita75@vetsoft.com",
             },
         )
         clients = Client.objects.all()
@@ -46,7 +46,33 @@ class ClientModelTest(TestCase):
         self.assertEqual(clients[0].name, "Juan Sebastian Veron")
         self.assertEqual(str(clients[0].phone), "5454221555232")
         self.assertEqual(clients[0].address, "13 y 44")
-        self.assertEqual(clients[0].email, "brujita75@hotmail.com")
+        self.assertEqual(clients[0].email, "brujita75@vetsoft.com")
+
+    def test_update_with_error(self):
+        """"
+        Verificamos que el cliente no tenga mal el error
+        """
+        Client.save_client(
+            {
+                "name": "Juan Sebastian Veron",
+                "phone": "54221555232",
+                "address": "13 y 44",
+                "email": "brujita75@vetsoft.com",
+            },
+        )
+        client = Client.objects.get(pk=1)
+
+        client.update_client({
+                "name": "Juan Sebastian Veron",
+                "phone": "54221555232",
+                "address": "13 y 44",
+                "email": "brujita75@hotmail.com",
+            })
+
+        client_updated = Client.objects.get(pk=1)
+
+        self.assertEqual(client_updated.email, "brujita75@vetsoft.com")
+
 
     def test_can_update_client(self):
         """
@@ -57,7 +83,7 @@ class ClientModelTest(TestCase):
                 "name": "Juan Sebastian Veron",
                 "phone": "5454221555232",
                 "address": "13 y 44",
-                "email": "brujita75@hotmail.com",
+                "email": "brujita75@vetsoft.com",
             },
         )
         client = Client.objects.get(pk=1)
@@ -79,7 +105,7 @@ class ClientModelTest(TestCase):
                 "name": "Juan Sebastian Veron",
                 "phone": "54221555232",
                 "address": "13 y 44",
-                "email": "brujita75@hotmail.com",
+                "email": "brujita75@vetsoft.com",
             },
         )
         client = Client.objects.get(pk=1)
@@ -101,7 +127,7 @@ class ClientModelTest(TestCase):
                 "name": "Juan Sebastian Veron",
                 "phone": "54221555232",
                 "address": "13 y 44",
-                "email": "brujita75@hotmail.com",
+                "email": "brujita75@vetsoft.com",
             },
         )
         client = Client.objects.get(pk=1)
@@ -117,9 +143,9 @@ class ClientModelTest(TestCase):
         saved, errors = Client.save_client(
             {
                 "name": "Juan Sebastian Veron 7",
-                "phone": "221555232",
+                "phone": "54221555232",
                 "address": "13 y 44",
-                "email": "brujita75@hotmail.com",
+                "email": "brujita75@vetsoft.com",
             },
         )
         self.assertFalse(saved)
@@ -132,9 +158,9 @@ class ClientModelTest(TestCase):
         Client.save_client(
             {
                 "name": "Juan Sebastian Veron",
-                "phone": "221555232",
+                "phone": "54221555232",
                 "address": "13 y 44",
-                "email": "brujita75@hotmail.com",
+                "email": "brujita75@vetsoft.com",
             },
         )
         client = Client.objects.get(pk=1)
@@ -157,7 +183,7 @@ class ClientModelTest(TestCase):
                 "name": "Benjamin Peres",
                 "phone": "542214504505",
                 "address": "1 y 60",
-                "email": "benjaminperes@hotmail.com",
+                "email": "benjaminperes@vetsoft.com",
             },
         )
         client = Client.objects.get(pk=1)

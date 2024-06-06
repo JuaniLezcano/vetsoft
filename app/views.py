@@ -55,6 +55,7 @@ def clients_form(request, id=None):
         client_id = request.POST.get("id", "")
         errors = {}
         saved = True
+        email = request.POST.get("email")
 
         if client_id == "":
             saved, errors = Client.save_client(request.POST)
@@ -65,6 +66,14 @@ def clients_form(request, id=None):
                 saved = False
             else:
                 client.update_client(request.POST)
+        if email:
+            try:
+                if not email.endswith("@vetsoft.com"):
+                    errors["email"] = "Por favor ingrese un email valido'"
+                    saved = False
+            except ValueError:
+                errors["email"] = "Por favor ingrese un email valido"
+
 
         if saved:
             return redirect(reverse("clients_repo"))
