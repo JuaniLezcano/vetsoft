@@ -35,7 +35,7 @@ class ClientModelTest(TestCase):
         Client.save_client(
             {
                 "name": "Juan Sebastian Veron",
-                "phone": "221555232",
+                "phone": "5454221555232",
                 "address": "13 y 44",
                 "email": "brujita75@hotmail.com",
             },
@@ -44,7 +44,7 @@ class ClientModelTest(TestCase):
         self.assertEqual(len(clients), 1)
 
         self.assertEqual(clients[0].name, "Juan Sebastian Veron")
-        self.assertEqual(clients[0].phone, "221555232")
+        self.assertEqual(str(clients[0].phone), "5454221555232")
         self.assertEqual(clients[0].address, "13 y 44")
         self.assertEqual(clients[0].email, "brujita75@hotmail.com")
 
@@ -55,20 +55,20 @@ class ClientModelTest(TestCase):
         Client.save_client(
             {
                 "name": "Juan Sebastian Veron",
-                "phone": "221555232",
+                "phone": "5454221555232",
                 "address": "13 y 44",
                 "email": "brujita75@hotmail.com",
             },
         )
         client = Client.objects.get(pk=1)
 
-        self.assertEqual(client.phone, "221555232")
+        self.assertEqual(str(client.phone), "5454221555232")
 
-        client.update_client({"phone": "221555233"})
+        client.update_client({"phone": "54221555233"})
 
         client_updated = Client.objects.get(pk=1)
 
-        self.assertEqual(client_updated.phone, "221555233")
+        self.assertEqual(str(client_updated.phone), "54221555233")
 
     def test_update_client_with_error(self):
         """
@@ -77,20 +77,20 @@ class ClientModelTest(TestCase):
         Client.save_client(
             {
                 "name": "Juan Sebastian Veron",
-                "phone": "221555232",
+                "phone": "54221555232",
                 "address": "13 y 44",
                 "email": "brujita75@hotmail.com",
             },
         )
         client = Client.objects.get(pk=1)
 
-        self.assertEqual(client.phone, "221555232")
+        self.assertEqual(str(client.phone), "54221555232")
 
         client.update_client({"phone": ""})
 
         client_updated = Client.objects.get(pk=1)
 
-        self.assertEqual(client_updated.phone, "221555232")
+        self.assertEqual(str(client_updated.phone), "54221555232")
 
     def test_clients_delete(self):
         """
@@ -99,7 +99,7 @@ class ClientModelTest(TestCase):
         Client.save_client(
             {
                 "name": "Juan Sebastian Veron",
-                "phone": "221555232",
+                "phone": "54221555232",
                 "address": "13 y 44",
                 "email": "brujita75@hotmail.com",
             },
@@ -146,6 +146,44 @@ class ClientModelTest(TestCase):
         client_updated = Client.objects.get(pk=1)
 
         self.assertEqual(client_updated.name, "Juan Sebastian Veron")
+
+    def test_cant_update_client_with_characters_in_phone_input(self):
+        """
+        Prueba que no se pueda actualizar un cliente con caracteres no numéricos en el teléfono.
+        Asegura que el número de teléfono no cambia cuando se intenta actualizar con un valor inválido.
+        """
+        Client.save_client(
+            {
+                "name": "Benjamin Peres",
+                "phone": "542214504505",
+                "address": "1 y 60",
+                "email": "benjaminperes@hotmail.com",
+            },
+        )
+        client = Client.objects.get(pk=1)
+
+        client.update_client({"phone": "123asd"})
+
+        client_updated = Client.objects.get(pk=1)
+
+        self.assertEqual(str(client_updated.phone), "542214504505")
+
+    def test_cant_create_client_with_characters_in_phone_input(self):
+        """
+        Prueba que no se pueda crear un cliente con caracteres no numéricos en el teléfono.
+        Asegura que el número de teléfono no pueda contener caracteres no númericos.
+        """
+        Client.save_client(
+            {
+                "name": "Benjamin Peres",
+                "phone": "54221asd",
+                "address": "1 y 60",
+                "email": "benjaminperes@hotmail.com",
+            },
+        )
+        clients = Client.objects.all()
+        self.assertEqual(len(clients), 0)
+
 
 class ProviderModelTest(TestCase):
     """
