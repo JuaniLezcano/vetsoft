@@ -43,15 +43,13 @@ def validate_client(data):
 
     if phone == "":
         errors["phone"] = "Por favor ingrese un teléfono"
-    elif not phone.isdigit():
-        errors["phone"] = "Por favor ingrese un numero de telefono valido, solo digitos"
     else:
         try:
             int (phone)
             if not phone.startswith("54"):
                 errors["phone"] = "El telefono debe comenzar con '54'"
         except ValueError:
-            errors["phone"] = "Formato de telefono invalido"
+            errors["phone"] = "Por favor ingrese un numero de telefono valido, solo digitos"
 
     if email == "":
         errors["email"] = "Por favor ingrese un email"
@@ -273,7 +271,7 @@ class Client(models.Model):
                     return False, errors
                 self.email= email
             except ValueError:
-                errors["email"] = "Formato de email inválido.o"
+                errors["email"] = "Formato de email inválido"
                 self.email = Client.objects.get(pk=self.pk).email
                 return False, errors
         phone = client_data.get("phone", "")

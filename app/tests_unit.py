@@ -137,72 +137,6 @@ class ClientModelTest(TestCase):
         self.assertEqual(Client.objects.count(), initial_count - 1)
         self.assertRedirects(response, reverse('clients_repo'))
 
-    def test_validate_wrong_type_phone(self):
-        """
-        Validacion de ingreso de caracter en phone
-        """
-        data = {"name": "Jose Rodriguez",
-                "phone": "aaa",
-                "city": "La Plata",
-                "email": "joser@vetsoft.com",}
-
-        errors = validate_client(data)
-        expected_errors = {
-            "phone": "Por favor ingrese un numero de telefono valido, solo digitos",
-        }
-        self.assertDictEqual(expected_errors, errors)
-
-    def test_validate_wrong_phone(self):
-        """
-        Validacion que el numero de phone comience con 54
-        """
-        data = {"name": "Jose Rodriguez",
-                "phone": "1111111111",
-                "city": "La Plata",
-                "email": "joser@vetsoft.com",}
-
-        errors = validate_client(data)
-        expected_errors = {
-            "phone": "El telefono debe comenzar con '54'",
-        }
-        self.assertDictEqual(expected_errors, errors)
-
-    def test_cant_update_client_with_error_phone(self):
-        """
-        Validacion al editar phone sea correcto
-        """
-        Client.save_client(
-            {
-                "name": "Jose Rodriguez",
-                "phone": "5414504505",
-                "city": "La Plata",
-                "email": "joser@vetsoft.com",
-            },
-        )
-        client = Client.objects.get(pk=1)
-        self.assertEqual(client.phone, 5414504505)
-        client.update_client({"phone": "1114504506"})
-        client_updated = Client.objects.get(pk=1)
-        self.assertEqual(client_updated.phone, 5414504505)
-
-    def test_cant_update_client_with_error_type_phone(self):
-        """
-        Validacion al editar phone sea correcto
-        """
-        Client.save_client(
-            {
-                "name": "Jose Rodriguez",
-                "phone": "5414504505",
-                "city": "La Plata",
-                "email": "joser@vetsoft.com",
-            },
-        )
-        client = Client.objects.get(pk=1)
-        self.assertEqual(client.phone, 5414504505)
-        client.update_client({"phone": "aaaaa"})
-        client_updated = Client.objects.get(pk=1)
-        self.assertEqual(client_updated.phone, 5414504505)
-
     def test_create_client_with_error_name(self):
         """
         Verifica que se no se pueda crear un cliente con un error
@@ -291,6 +225,72 @@ class ClientModelTest(TestCase):
         )
         self.assertFalse(saved)
         self.assertEqual(errors["city"], "Por favor seleccione una ciudad")
+
+    def test_validate_wrong_type_phone(self):
+        """
+        Validacion de ingreso de caracter en phone
+        """
+        data = {"name": "Jose Rodriguez",
+                "phone": "aaa",
+                "city": "La Plata",
+                "email": "joser@vetsoft.com",}
+
+        errors = validate_client(data)
+        expected_errors = {
+            "phone": "Por favor ingrese un numero de telefono valido, solo digitos",
+        }
+        self.assertDictEqual(expected_errors, errors)
+
+    def test_validate_wrong_phone(self):
+        """
+        Validacion que el numero de phone comience con 54
+        """
+        data = {"name": "Jose Rodriguez",
+                "phone": "1111111111",
+                "city": "La Plata",
+                "email": "joser@vetsoft.com",}
+
+        errors = validate_client(data)
+        expected_errors = {
+            "phone": "El telefono debe comenzar con '54'",
+        }
+        self.assertDictEqual(expected_errors, errors)
+
+    def test_cant_update_client_with_error_phone(self):
+        """
+        Validacion al editar phone sea correcto
+        """
+        Client.save_client(
+            {
+                "name": "Jose Rodriguez",
+                "phone": "5414504505",
+                "city": "La Plata",
+                "email": "joser@vetsoft.com",
+            },
+        )
+        client = Client.objects.get(pk=1)
+        self.assertEqual(client.phone, 5414504505)
+        client.update_client({"phone": "1114504506"})
+        client_updated = Client.objects.get(pk=1)
+        self.assertEqual(client_updated.phone, 5414504505)
+
+    def test_cant_update_client_with_error_type_phone(self):
+        """
+        Validacion al editar phone sea correcto
+        """
+        Client.save_client(
+            {
+                "name": "Jose Rodriguez",
+                "phone": "5414504505",
+                "city": "La Plata",
+                "email": "joser@vetsoft.com",
+            },
+        )
+        client = Client.objects.get(pk=1)
+        self.assertEqual(client.phone, 5414504505)
+        client.update_client({"phone": "aaaaa"})
+        client_updated = Client.objects.get(pk=1)
+        self.assertEqual(client_updated.phone, 5414504505)
 
 class ProviderModelTest(TestCase):
     """
