@@ -57,6 +57,7 @@ def clients_form(request, id=None):
         errors = {}
         saved = True
         email = request.POST.get("email")
+        phone = request.POST.get("phone", "")
 
         if client_id == "":
             saved, errors = Client.save_client(request.POST)
@@ -75,6 +76,15 @@ def clients_form(request, id=None):
             except ValueError:
                 errors["email"] = "Por favor ingrese un email valido"
 
+
+        if phone:
+            try:
+                int (phone)
+                if not phone.startswith("54"):
+                    saved=False
+                    errors["phone"] = "El telefono debe comenzar con '54'"
+            except ValueError:
+                errors["phone"] = "Por favor ingrese un numero de telefono valido, solo digitos"
 
         if saved:
             return redirect(reverse("clients_repo"))

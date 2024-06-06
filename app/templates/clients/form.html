@@ -42,11 +42,12 @@
                         type="number"
                         id="phone"
                         name="phone"
+                        type="tel"
                         class="form-control"
-                        value="{{client.phone}}"
+                        value="{{ client.phone|default_if_none:'' }}"
                         oninput="this.value = this.value.replace(/[^\d]/g, '')"
                         required
-                    />
+                        pattern="54\d{11}"/>
 
                     {% if errors.phone %}
                     <div class="invalid-feedback">{{ errors.phone }}</div>

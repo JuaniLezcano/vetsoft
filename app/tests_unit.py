@@ -10,6 +10,7 @@ from app.models import (
     Product,
     Provider,
     Veterinary,
+    validate_client,
     validate_pet,
     validate_provider,
     validate_veterinary,
@@ -224,6 +225,72 @@ class ClientModelTest(TestCase):
         )
         self.assertFalse(saved)
         self.assertEqual(errors["city"], "Por favor seleccione una ciudad")
+
+    def test_validate_wrong_type_phone(self):
+        """
+        Validacion de ingreso de caracter en phone
+        """
+        data = {"name": "Jose Rodriguez",
+                "phone": "aaa",
+                "city": "La Plata",
+                "email": "joser@vetsoft.com",}
+
+        errors = validate_client(data)
+        expected_errors = {
+            "phone": "Por favor ingrese un numero de telefono valido, solo digitos",
+        }
+        self.assertDictEqual(expected_errors, errors)
+
+    def test_validate_wrong_phone(self):
+        """
+        Validacion que el numero de phone comience con 54
+        """
+        data = {"name": "Jose Rodriguez",
+                "phone": "1111111111",
+                "city": "La Plata",
+                "email": "joser@vetsoft.com",}
+
+        errors = validate_client(data)
+        expected_errors = {
+            "phone": "El telefono debe comenzar con '54'",
+        }
+        self.assertDictEqual(expected_errors, errors)
+
+    def test_cant_update_client_with_error_phone(self):
+        """
+        Validacion al editar phone sea correcto
+        """
+        Client.save_client(
+            {
+                "name": "Jose Rodriguez",
+                "phone": "5414504505",
+                "city": "La Plata",
+                "email": "joser@vetsoft.com",
+            },
+        )
+        client = Client.objects.get(pk=1)
+        self.assertEqual(client.phone, 5414504505)
+        client.update_client({"phone": "1114504506"})
+        client_updated = Client.objects.get(pk=1)
+        self.assertEqual(client_updated.phone, 5414504505)
+
+    def test_cant_update_client_with_error_type_phone(self):
+        """
+        Validacion al editar phone sea correcto
+        """
+        Client.save_client(
+            {
+                "name": "Jose Rodriguez",
+                "phone": "5414504505",
+                "city": "La Plata",
+                "email": "joser@vetsoft.com",
+            },
+        )
+        client = Client.objects.get(pk=1)
+        self.assertEqual(client.phone, 5414504505)
+        client.update_client({"phone": "aaaaa"})
+        client_updated = Client.objects.get(pk=1)
+        self.assertEqual(client_updated.phone, 5414504505)
 
 class ProviderModelTest(TestCase):
     """
@@ -807,7 +874,7 @@ class VeterinaryModelTest(TestCase):
         Veterinary.save_veterinary(
             {
                 "name": "Jose Rodriguez",
-                "phone": "2214504505",
+                "phone": "5414504505",
                 "email": "joser@hotmail.com",
             },
         )
@@ -815,7 +882,7 @@ class VeterinaryModelTest(TestCase):
         self.assertEqual(len(veterinaries), 1)
 
         self.assertEqual(veterinaries[0].name, "Jose Rodriguez")
-        self.assertEqual(veterinaries[0].phone, "2214504505")
+        self.assertEqual(veterinaries[0].phone, "5414504505")
         self.assertEqual(veterinaries[0].email, "joser@hotmail.com")
 
     def test_vet_delete(self):
@@ -825,7 +892,7 @@ class VeterinaryModelTest(TestCase):
         Veterinary.save_veterinary(
             {
                 "name": "Jose Rodriguez",
-                "phone": "2214504505",
+                "phone": "5414504505",
                 "email": "joser@hotmail.com",
             },
         )
@@ -853,7 +920,7 @@ class VeterinaryModelTest(TestCase):
         Verifica que el atributo email del veterinario este en el formato correcto
         """
         data = {"name": "Jose Rodriguez",
-                "phone": "2214504505",
+                "phone": "5414504505",
                 "email": "joserhotmail.com",}
         errors = validate_veterinary(data)
         expected_errors = {
@@ -868,12 +935,12 @@ class VeterinaryModelTest(TestCase):
         Veterinary.save_veterinary(
             {
                 "name": "Jose Rodriguez",
-                "phone": "2214504505",
+                "phone": "5414504505",
                 "email": "joser@hotmail.com",
             },
         )
         veterinary = Veterinary.objects.get(pk=1)
-        self.assertEqual(veterinary.phone, "2214504505")
-        veterinary.update_veterinary({"phone": "2214504506"})
+        self.assertEqual(veterinary.phone, "5414504505")
+        veterinary.update_veterinary({"phone": "5414504506"})
         veterinary_updated = Veterinary.objects.get(pk=1)
-        self.assertEqual(veterinary_updated.phone, "2214504506")
+        self.assertEqual(veterinary_updated.phone, "5414504506")

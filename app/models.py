@@ -38,13 +38,18 @@ def validate_client(data):
     if any(char.isdigit() for char in name):
         errors["name"] = "El nombre no puede contener números."
 
-    if phone == "":
-        errors["phone"] = "Por favor ingrese un teléfono"
-    elif not phone.isdigit():
-        errors["phone"] = "Por favor ingrese un numero de telefono valido, solo digitos"
-
     if city == "":
         errors["city"] = "Por favor seleccione una ciudad"
+
+    if phone == "":
+        errors["phone"] = "Por favor ingrese un teléfono"
+    else:
+        try:
+            int (phone)
+            if not phone.startswith("54"):
+                errors["phone"] = "El telefono debe comenzar con '54'"
+        except ValueError:
+            errors["phone"] = "Por favor ingrese un numero de telefono valido, solo digitos"
 
     if email == "":
         errors["email"] = "Por favor ingrese un email"
@@ -266,10 +271,28 @@ class Client(models.Model):
                     return False, errors
                 self.email= email
             except ValueError:
-                errors["email"] = "Formato de email inválido.o"
+                errors["email"] = "Formato de email inválido"
                 self.email = Client.objects.get(pk=self.pk).email
                 return False, errors
+        phone = client_data.get("phone", "")
+        if phone:
+            try:
+                int (phone)
+                if not phone.startswith("54"):
+                    errors["phone"] = "El telefono debe comenzar con '54'"
+                    self.phone = Client.objects.get(pk=self.pk).phone
+                    return False, errors
+                self.phone = phone
+            except ValueError:
+                errors["phone"] = "Formato de Telefono invalido"
+                self.phone = Client.objects.get(pk=self.pk).phone
+                return False, errors
+
+        if not (client_data.get("name") or client_data.get("email") or client_data.get("adress") or client_data.get("phone")):
+            return True, None
+
         self.save()
+        return True, None
 
 
 class Product(models.Model):

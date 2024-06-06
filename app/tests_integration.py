@@ -108,6 +108,21 @@ class ClientsTest(TestCase):
         self.assertContains(response, "Por favor ingrese un email")
         self.assertContains(response, "Por favor seleccione una ciudad")
 
+    def test_validation_invalid_type_phone(self):
+        """
+        Valida que se ingresen solo digitos en phone.
+        """
+        response = self.client.post(
+        reverse("clients_form"),
+        data={
+            "name": "Paco",
+            "phone": "aaaaaa",
+            "email": "paco@hotmail.com",
+        },
+    )
+
+        self.assertContains(response, "Por favor ingrese un numero de telefono valido, solo digitos")
+
     def test_should_response_with_404_status_if_client_doesnt_exists(self):
         """
         Verifica que se reciba una respuesta 404 si el cliente no funciona correctamente
@@ -239,7 +254,7 @@ class ClientsTest(TestCase):
                 "name": "Benjamin Peres",
                 "phone": "54221asd",
                 "city": "Ensenada",
-                "email": "benjaminperes@hotmail.com",
+                "email": "benjaminperes@vetsoft.com",
             },
         )
 
@@ -860,7 +875,7 @@ class VetsTest(TestCase):
             reverse("veterinary_form"),
             data={
                 "name": "Jose Rodriguez",
-                "phone": "2214504505",
+                "phone": "5414504505",
                 "email": "joser@hotmail.com",
             },
         )
@@ -868,7 +883,7 @@ class VetsTest(TestCase):
         self.assertEqual(len(veterinaries), 1)
 
         self.assertEqual(veterinaries[0].name, "Jose Rodriguez")
-        self.assertEqual(veterinaries[0].phone, "2214504505")
+        self.assertEqual(veterinaries[0].phone, "5414504505")
         self.assertEqual(veterinaries[0].email, "joser@hotmail.com")
 
         self.assertRedirects(response, reverse("veterinary_repo"))
