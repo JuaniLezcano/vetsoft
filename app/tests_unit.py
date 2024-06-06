@@ -208,7 +208,7 @@ class ClientModelTest(TestCase):
             },
         )
         clients = Client.objects.all()
-        self.assertEqual(len(clients), 0)  
+        self.assertEqual(len(clients), 0)
 
 
 class ProviderModelTest(TestCase):
