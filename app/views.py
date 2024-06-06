@@ -51,6 +51,7 @@ def clients_form(request, id=None):
         Si la solicitud es de tipo POST y los datos se guardan correctamente, redirige al repositorio de clientes.
         Si se proporciona un ID válido y se encuentra el cliente correspondiente, muestra el formulario con los datos del cliente.
     """
+    cities = dict(Client.City.choices)
     if request.method == "POST":
         client_id = request.POST.get("id", "")
         errors = {}
@@ -79,14 +80,14 @@ def clients_form(request, id=None):
             return redirect(reverse("clients_repo"))
 
         return render(
-            request, "clients/form.html", {"errors": errors, "client": request.POST},
+            request, "clients/form.html", {"errors": errors, "client": request.POST, "cities": cities},
         )
 
     client = None
     if id is not None:
         client = get_object_or_404(Client, pk=id)
 
-    return render(request, "clients/form.html", {"client": client})
+    return render(request, "clients/form.html", {"client": client, "cities": cities})
 
 
 def clients_delete(request):

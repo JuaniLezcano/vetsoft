@@ -77,7 +77,7 @@ class ClientsTest(TestCase):
             data={
                 "name": "Juan Sebastian Veron",
                 "phone": "54221555232",
-                "address": "13 y 44",
+                "city": "La Plata",
                 "email": "brujita75@vetsoft.com",
             },
         )
@@ -86,7 +86,7 @@ class ClientsTest(TestCase):
 
         self.assertEqual(clients[0].name, "Juan Sebastian Veron")
         self.assertEqual(str(clients[0].phone), "54221555232")
-        self.assertEqual(clients[0].address, "13 y 44")
+        self.assertEqual(clients[0].city, "La Plata")
         self.assertEqual(clients[0].email, "brujita75@vetsoft.com")
 
         self.assertRedirects(response, reverse("clients_repo"))
@@ -106,6 +106,7 @@ class ClientsTest(TestCase):
         self.assertContains(response, "Por favor ingrese un nombre")
         self.assertContains(response, "Por favor ingrese un teléfono")
         self.assertContains(response, "Por favor ingrese un email")
+        self.assertContains(response, "Por favor seleccione una ciudad")
 
     def test_should_response_with_404_status_if_client_doesnt_exists(self):
         """
@@ -138,7 +139,7 @@ class ClientsTest(TestCase):
             data={
                 "name": "Juan Sebastian Veron",
                 "phone": "221555232",
-                "address": "13 y 44",
+                "city": "La Plata",
                 "email": "brujita75@gmail.com",
             },
         )
@@ -172,7 +173,7 @@ class ClientsTest(TestCase):
         """
         client = Client.objects.create(
             name="Juan Sebastián Veron",
-            address="13 y 44",
+            city="La Plata",
             phone="54221555232",
             email="brujita75@vetsoft.com",
         )
@@ -182,6 +183,9 @@ class ClientsTest(TestCase):
             data={
                 "id": client.id,
                 "name": "Guido Carrillo",
+                "phone": "54221555232",
+                "city": "La Plata",
+                "email": "brujita75@vetsoft.com",
             },
         )
 
@@ -191,7 +195,7 @@ class ClientsTest(TestCase):
         editedClient = Client.objects.get(pk=client.id)
         self.assertEqual(editedClient.name, "Guido Carrillo")
         self.assertEqual(str(editedClient.phone), client.phone)
-        self.assertEqual(editedClient.address, client.address)
+        self.assertEqual(editedClient.city, client.city)
         self.assertEqual(editedClient.email, client.email)
 
     def test_edit_user_with_invalid_data(self):
@@ -200,9 +204,9 @@ class ClientsTest(TestCase):
         """
         client = Client.objects.create(
             name="Juan Sebastián Veron",
-            address="13 y 44",
-            phone="221555232",
-            email="brujita75@hotmail.com",
+            city="La Plata",
+            phone="54221555232",
+            email="brujita75@vetsoft.com",
         )
 
         response = self.client.post(
@@ -210,6 +214,9 @@ class ClientsTest(TestCase):
             data={
                 "id": client.id,
                 "name": "Guido Carrillo 9",
+                "phone": "54221555232",
+                "city": "La Plata",
+                "email": "brujita75@vetsoft.com",
             },
         )
 
@@ -231,7 +238,7 @@ class ClientsTest(TestCase):
             data={
                 "name": "Benjamin Peres",
                 "phone": "54221asd",
-                "address": "1 y 60",
+                "city": "Ensenada",
                 "email": "benjaminperes@hotmail.com",
             },
         )
@@ -247,8 +254,8 @@ class ClientsTest(TestCase):
         client = Client.objects.create(
                 name= "Benjamin Peres",
                 phone= "542214504505",
-                address= "1 y 60",
-                email= "benjaminperes@hotmail.com",
+                city= "La Plata",
+                email= "benjaminperes@vetsoft.com",
         )
 
         self.client.post(
@@ -257,6 +264,8 @@ class ClientsTest(TestCase):
                 "id": client.id,
                 "name": "Benjamin Peres",
                 "phone": "54123asd",
+                "city": "La Plata",
+                "email": "benjaminperes@vetsoft.com",
             },
         )
         editedClient = Client.objects.get(pk=client.id)

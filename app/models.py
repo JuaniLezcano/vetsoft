@@ -28,6 +28,7 @@ def validate_client(data):
 
     name = data.get("name", "")
     phone = data.get("phone", "")
+    city = data.get("city", "")
     email = data.get("email", "")
     pattern_email = r'^[a-zA-Z0-9._%+-]+@vetsoft\.com$'
 
@@ -41,6 +42,10 @@ def validate_client(data):
         errors["phone"] = "Por favor ingrese un teléfono"
     elif not phone.isdigit():
         errors["phone"] = "Por favor ingrese un numero de telefono valido, solo digitos"
+
+    if city == "":
+        errors["city"] = "Por favor seleccione una ciudad"
+
     if email == "":
         errors["email"] = "Por favor ingrese un email"
     else:
@@ -194,7 +199,7 @@ class Client(models.Model):
         name (str): Nombre del cliente.
         phone (str): Número de teléfono del cliente.
         email (str): Dirección de correo electrónico del cliente.
-        address (str, opcional): Dirección del cliente (opcional).
+        city (str, opcional): Ciudad del cliente (opcional).
 
     Métodos:
         __str__: Método para representar el objeto cliente como una cadena.
@@ -202,12 +207,17 @@ class Client(models.Model):
         update_client: Método para actualizar la información de un cliente existente en la base de datos.
     """
 
+    class City(models.TextChoices):
+        la_Plata = "La Plata"
+        berisso = "Berisso"
+        ensenada = "Ensenada"
+
     name = models.CharField(max_length=100)
     phone = models.IntegerField()
     email = models.EmailField()
-    address = models.CharField(max_length=100, blank=True)
+    city = models.CharField(choices=City.choices,max_length=100)
 
-    def __str__(self):
+    def _str_(self):
         return self.name
 
     @classmethod
@@ -220,7 +230,7 @@ class Client(models.Model):
             - "name" (str): El nombre del cliente.
             - "phone" (str): El número de teléfono del cliente.
             - "email" (str): La dirección de correo electrónico del cliente.
-            - "address" (str): La dirección del cliente.
+            - "city" (str): La ciudad del cliente.
         """
         errors = validate_client(client_data)
 
@@ -231,7 +241,7 @@ class Client(models.Model):
             name=client_data.get("name"),
             phone=client_data.get("phone"),
             email=client_data.get("email"),
-            address=client_data.get("address"),
+            city=client_data.get("city"),
         )
 
         return True, None
@@ -243,10 +253,11 @@ class Client(models.Model):
         pattern_email = r'^[a-zA-Z0-9._%+-]+@vetsoft\.com$'
         errors = {}
         self.name = client_data.get("name", "") or self.name
+        self.city = client_data.get("city", "") or self.city
+
         if (client_data.get("phone", "").isdigit()):
             self.phone = client_data.get("phone", "") or self.phone
-        self.address = client_data.get("address", "") or self.address
-        email = client_data.get("email", "")
+        email = client_data.get("email", "") or self.email
         if email:
             try:
                 if not re.match(pattern_email, email):
