@@ -183,6 +183,9 @@ class ClientsTest(TestCase):
             data={
                 "id": client.id,
                 "name": "Guido Carrillo",
+                "phone": "54221555232",
+                "city": "La Plata",
+                "email": "brujita75@vetsoft.com",
             },
         )
 
@@ -201,9 +204,9 @@ class ClientsTest(TestCase):
         """
         client = Client.objects.create(
             name="Juan Sebastián Veron",
-            address="13 y 44",
-            phone="221555232",
-            email="brujita75@hotmail.com",
+            city="La Plata",
+            phone="54221555232",
+            email="brujita75@vetsoft.com",
         )
 
         response = self.client.post(
@@ -211,6 +214,9 @@ class ClientsTest(TestCase):
             data={
                 "id": client.id,
                 "name": "Guido Carrillo 9",
+                "phone": "54221555232",
+                "city": "La Plata",
+                "email": "brujita75@vetsoft.com",
             },
         )
 
@@ -232,7 +238,7 @@ class ClientsTest(TestCase):
             data={
                 "name": "Benjamin Peres",
                 "phone": "54221asd",
-                "address": "1 y 60",
+                "city": "Ensenada",
                 "email": "benjaminperes@hotmail.com",
             },
         )
@@ -248,8 +254,8 @@ class ClientsTest(TestCase):
         client = Client.objects.create(
                 name= "Benjamin Peres",
                 phone= "542214504505",
-                address= "1 y 60",
-                email= "benjaminperes@hotmail.com",
+                city= "La Plata",
+                email= "benjaminperes@vetsoft.com",
         )
 
         self.client.post(
@@ -258,6 +264,8 @@ class ClientsTest(TestCase):
                 "id": client.id,
                 "name": "Benjamin Peres",
                 "phone": "54123asd",
+                "city": "La Plata",
+                "email": "benjaminperes@vetsoft.com",
             },
         )
         editedClient = Client.objects.get(pk=client.id)

@@ -368,7 +368,7 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
         self.page.get_by_label("Nombre").fill("Juan Sebastián Veron 7")
         self.page.get_by_label("Teléfono").fill("221555232")
         self.page.get_by_label("Email").fill("brujita75@hotmail.com")
-        self.page.get_by_label("Dirección").fill("13 y 44")
+        self.page.get_by_label("Ciudad").select_option("La Plata")
 
         self.page.get_by_role("button", name="Guardar").click()
 
@@ -380,7 +380,7 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
         """
         client = Client.objects.create(
             name="Juan Sebastián Veron",
-            address="13 y 44",
+            city="La Plata",
             phone="221555232",
             email="brujita75@hotmail.com",
         )
@@ -391,7 +391,7 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
         self.page.get_by_label("Nombre").fill("Guido Carrillo 9")
         self.page.get_by_label("Teléfono").fill("221232555")
         self.page.get_by_label("Email").fill("goleador@gmail.com")
-        self.page.get_by_label("Dirección").fill("1 y 57")
+        self.page.get_by_label("Ciudad").select_option("La Plata")
 
         self.page.get_by_role("button", name="Guardar").click()
 
@@ -408,7 +408,7 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
         self.page.get_by_label("Nombre").fill("Benjamin Peres")
         self.page.evaluate("document.querySelector('input[name=phone]').value = '54221asd'")
         self.page.get_by_label("Email").fill("benjaminperes@hotmail.com")
-        self.page.get_by_label("Dirección").fill("1 y 60")
+        self.page.get_by_label("Ciudad").select_option("La Plata")
 
         self.page.get_by_role("button", name="Guardar").click()
 

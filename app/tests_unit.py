@@ -82,7 +82,7 @@ class ClientModelTest(TestCase):
             {
                 "name": "Juan Sebastian Veron",
                 "phone": "5454221555232",
-                "address": "13 y 44",
+                "city": "La Plata",
                 "email": "brujita75@vetsoft.com",
             },
         )
@@ -144,7 +144,7 @@ class ClientModelTest(TestCase):
             {
                 "name": "Juan Sebastian Veron 7",
                 "phone": "54221555232",
-                "address": "13 y 44",
+                "city": "La Plata",
                 "email": "brujita75@vetsoft.com",
             },
         )
@@ -159,7 +159,7 @@ class ClientModelTest(TestCase):
             {
                 "name": "Juan Sebastian Veron",
                 "phone": "54221555232",
-                "address": "13 y 44",
+                "city": "La Plata",
                 "email": "brujita75@vetsoft.com",
             },
         )
@@ -182,7 +182,7 @@ class ClientModelTest(TestCase):
             {
                 "name": "Benjamin Peres",
                 "phone": "542214504505",
-                "address": "1 y 60",
+                "city": "La Plata",
                 "email": "benjaminperes@vetsoft.com",
             },
         )
@@ -203,13 +203,27 @@ class ClientModelTest(TestCase):
             {
                 "name": "Benjamin Peres",
                 "phone": "54221asd",
-                "address": "1 y 60",
+                "city": "La Plata",
                 "email": "benjaminperes@hotmail.com",
             },
         )
         clients = Client.objects.all()
         self.assertEqual(len(clients), 0)
 
+    def test_create_client_with_empty_city(self):
+        """
+        Verifica que se no se pueda crear un cliente con un error
+        """
+        saved, errors = Client.save_client(
+            {
+                "name": "Juan Sebastian Veron",
+                "phone": "54221555232",
+                "city": "",
+                "email": "brujita75@vetsoft.com",
+            },
+        )
+        self.assertFalse(saved)
+        self.assertEqual(errors["city"], "Por favor seleccione una ciudad")
 
 class ProviderModelTest(TestCase):
     """
