@@ -76,7 +76,7 @@ class ClientsTest(TestCase):
             reverse("clients_form"),
             data={
                 "name": "Juan Sebastian Veron",
-                "phone": "221555232",
+                "phone": "54221555232",
                 "address": "13 y 44",
                 "email": "brujita75@vetsoft.com",
             },
@@ -85,7 +85,7 @@ class ClientsTest(TestCase):
         self.assertEqual(len(clients), 1)
 
         self.assertEqual(clients[0].name, "Juan Sebastian Veron")
-        self.assertEqual(clients[0].phone, "221555232")
+        self.assertEqual(str(clients[0].phone), "54221555232")
         self.assertEqual(clients[0].address, "13 y 44")
         self.assertEqual(clients[0].email, "brujita75@vetsoft.com")
 
@@ -122,7 +122,7 @@ class ClientsTest(TestCase):
             reverse("clients_form"),
             data={
                 "name": "Juan Sebastian Veron",
-                "phone": "221555232",
+                "phone": "54221555232",
                 "address": "13 y 44",
                 "email": "brujita75",
             },
@@ -144,6 +144,22 @@ class ClientsTest(TestCase):
         )
         self.assertContains(response, "Por favor ingrese un email valido")
 
+    def test_validation_invalid_name(self):
+        """
+        Verifica que salte un error cuando se ingresa un nombre con numeros
+        """
+        response = self.client.post(
+            reverse("clients_form"),
+            data={
+                "name": "Juan Sebastian Veron1",
+                "phone": "221555232",
+                "address": "13 y 44",
+                "email": "brujita75@hotmail.com",
+            },
+        )
+
+        self.assertContains(response, "El nombre no puede contener números.")
+
     def test_edit_user_with_valid_data(self):
         """
         Verifica que se pueda editar un cliente con datos válidos.
@@ -157,7 +173,7 @@ class ClientsTest(TestCase):
         client = Client.objects.create(
             name="Juan Sebastián Veron",
             address="13 y 44",
-            phone="221555232",
+            phone="54221555232",
             email="brujita75@vetsoft.com",
         )
 
@@ -174,9 +190,78 @@ class ClientsTest(TestCase):
 
         editedClient = Client.objects.get(pk=client.id)
         self.assertEqual(editedClient.name, "Guido Carrillo")
-        self.assertEqual(editedClient.phone, client.phone)
+        self.assertEqual(str(editedClient.phone), client.phone)
         self.assertEqual(editedClient.address, client.address)
         self.assertEqual(editedClient.email, client.email)
+
+    def test_edit_user_with_invalid_data(self):
+        """
+        Verifica que salte un error cuando se edite un nombre con numeros
+        """
+        client = Client.objects.create(
+            name="Juan Sebastián Veron",
+            address="13 y 44",
+            phone="221555232",
+            email="brujita75@hotmail.com",
+        )
+
+        response = self.client.post(
+            reverse("clients_form"),
+            data={
+                "id": client.id,
+                "name": "Guido Carrillo 9",
+            },
+        )
+
+        # No redirect after post due to error
+        self.assertEqual(response.status_code, 200)
+
+        editedClient = Client.objects.get(pk=client.id)
+        self.assertEqual(editedClient.name, "Juan Sebastián Veron")
+        self.assertContains(response, "El nombre no puede contener números.")
+
+    def test_validation_create_client_with_invalid_phone(self):
+        """
+        Prueba la creación de un cliente con un número de teléfono inválido.
+        Asegura que el formulario retorna un mensaje de error cuando el número
+        de teléfono contiene caracteres no numéricos.
+        """
+        response = self.client.post(
+            reverse("clients_form"),
+            data={
+                "name": "Benjamin Peres",
+                "phone": "54221asd",
+                "address": "1 y 60",
+                "email": "benjaminperes@hotmail.com",
+            },
+        )
+
+        self.assertContains(response, "Por favor ingrese un numero de telefono valido, solo digitos")
+
+    def test_validation_update_with_invalid_phone(self):
+        """
+        Prueba la actualización de un cliente con un número de teléfono inválido.
+        Asegura que el formulario retorna un mensaje de error y no actualiza el
+        número de teléfono cuando el número proporcionado contiene caracteres no numéricos.
+        """
+        client = Client.objects.create(
+                name= "Benjamin Peres",
+                phone= "542214504505",
+                address= "1 y 60",
+                email= "benjaminperes@hotmail.com",
+        )
+
+        self.client.post(
+            reverse("clients_form"),
+            data={
+                "id": client.id,
+                "name": "Benjamin Peres",
+                "phone": "54123asd",
+            },
+        )
+        editedClient = Client.objects.get(pk=client.id)
+
+        self.assertEqual(str(editedClient.phone), client.phone)
 
 class ProvidersTest(TestCase):
     """
@@ -215,6 +300,7 @@ class ProvidersTest(TestCase):
 
 
         self.assertRedirects(response, reverse("providers_repo"))
+
     def test_validation_invalid_email(self):
         """
         Verifica que en el caso de ingresar un mail no valido de un aviso

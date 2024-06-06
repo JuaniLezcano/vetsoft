@@ -61,7 +61,11 @@ def clients_form(request, id=None):
             saved, errors = Client.save_client(request.POST)
         else:
             client = get_object_or_404(Client, pk=client_id)
-            client.update_client(request.POST)
+            if any(char.isdigit() for char in request.POST["name"]):
+                errors["name"] = "El nombre no puede contener números."
+                saved = False
+            else:
+                client.update_client(request.POST)
         if email:
             try:
                 if not email.endswith("@vetsoft.com"):

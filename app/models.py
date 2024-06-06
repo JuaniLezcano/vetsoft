@@ -34,9 +34,13 @@ def validate_client(data):
     if name == "":
         errors["name"] = "Por favor ingrese un nombre"
 
+    if any(char.isdigit() for char in name):
+        errors["name"] = "El nombre no puede contener números."
+
     if phone == "":
         errors["phone"] = "Por favor ingrese un teléfono"
-
+    elif not phone.isdigit():
+        errors["phone"] = "Por favor ingrese un numero de telefono valido, solo digitos"
     if email == "":
         errors["email"] = "Por favor ingrese un email"
     else:
@@ -199,7 +203,7 @@ class Client(models.Model):
     """
 
     name = models.CharField(max_length=100)
-    phone = models.CharField(max_length=15)
+    phone = models.IntegerField()
     email = models.EmailField()
     address = models.CharField(max_length=100, blank=True)
 
@@ -239,7 +243,8 @@ class Client(models.Model):
         pattern_email = r'^[a-zA-Z0-9._%+-]+@vetsoft\.com$'
         errors = {}
         self.name = client_data.get("name", "") or self.name
-        self.phone = client_data.get("phone", "") or self.phone
+        if (client_data.get("phone", "").isdigit()):
+            self.phone = client_data.get("phone", "") or self.phone
         self.address = client_data.get("address", "") or self.address
         email = client_data.get("email", "")
         if email:

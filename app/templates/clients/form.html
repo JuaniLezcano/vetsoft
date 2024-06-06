@@ -27,6 +27,8 @@
                         name="name"
                         value="{{client.name}}"
                         class="form-control"
+                        pattern="[A-Za-z\s]*"
+                        title="El nombre solo puede contener letras y espacios."
                         required
                     />
 
@@ -37,11 +39,12 @@
                 <div>
                     <label for="phone" class="form-label">Teléfono</label>
                     <input
-                        type="text"
+                        type="number"
                         id="phone"
                         name="phone"
                         class="form-control"
                         value="{{client.phone}}"
+                        oninput="this.value = this.value.replace(/[^\d]/g, '')"
                         required
                     />
 
@@ -76,9 +79,7 @@
                         class="form-control"
                     />
 
-                    <div class="invalid-feedback">
-                        La dirrección es opcional
-                    </div>
+                    <div class="invalid-feedback">La dirección es opcional</div>
                 </div>
 
                 <button class="btn btn-primary">Guardar</button>
