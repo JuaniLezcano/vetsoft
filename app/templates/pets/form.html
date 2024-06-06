@@ -61,7 +61,7 @@
                         id="birthday"
                         name="birthday"
                         class="form-control"
-                        value="{{ pet.birthday }}"
+                        value="{{ pet.birthday|date:'Y-m-d' }}"
                         required
                         max="{% now "Y-m-d" %}" />
 
