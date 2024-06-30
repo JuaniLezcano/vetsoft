@@ -26,7 +26,7 @@
                         id="name"
                         name="name"
                         value="{{ client.name }}"
-                        class="form-control"
+                        class="form-control {% if errors.name %}is-invalid{% elif client.name %}is-valid{% endif %}"
                         pattern="[A-Za-z\s]*"
                         title="El nombre solo puede contener letras y espacios."
                         required
@@ -43,7 +43,7 @@
                         id="phone"
                         name="phone"
                         type="tel"
-                        class="form-control"
+                        class="form-control {% if errors.phone %}is-invalid{% elif client.phone %}is-valid{% endif %}"
                         value="{{ client.phone|default_if_none:'' }}"
                         oninput="this.value = this.value.replace(/[^\d]/g, '')"
                         required
@@ -74,7 +74,7 @@
                     <label for="city" class="form-label">Ciudad</label>
                     <select name="city" 
                     id="city"
-                    class="form-select" 
+                    class="form-control {% if errors.city %}is-invalid{% elif client.city %}is-valid{% endif %}"
                     required>
                         <option value="" disabled selected hidden>Seleccionar ciudad...</option>
                         {% for key, value in cities.items %}
