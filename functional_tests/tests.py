@@ -357,6 +357,42 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
             "href", reverse("clients_edit", kwargs={"id": client.id}),
         )
 
+    def test_should_validate_email_correctly(self):
+        """
+        Verifica que se valida el email correctamente en el formulario de clientes.
+        """
+        # Navega a la URL del formulario de clientes
+        self.page.goto(f"{self.live_server_url}{reverse('clients_form')}")
+
+        # Completa el formulario con un email inválido
+        self.page.fill("input[name='name']", "Juan Sebastián Veron")
+        self.page.fill("input[name='phone']", "54221555232")
+        self.page.fill("input[name='city']", "La Plata")
+        self.page.fill("input[name='email']", "brujita75")
+
+        # Envía el formulario
+        self.page.click("button[type='submit']")
+
+        # Verifica que se muestra el mensaje de error correcto
+        expect(self.page.get_by_text("Por favor ingrese un email valido que termine con @vetsoft.com")).to_be_visible()
+
+        # Completa el formulario con un email válido
+        self.page.fill("input[name='email']", "juan.veron@vetsoft.com")
+
+        # Envía el formulario
+        self.page.click("button[type='submit']")
+
+        # Verifica que se redirige al repositorio de clientes
+        expect(self.page).to_have_url(reverse('clients_repo'))
+
+        # Verifica que el cliente se ha guardado correctamente en la base de datos
+        client = Client.objects.get(email="juan.veron@vetsoft.com")
+        self.assertIsNotNone(client)
+        self.assertEqual(client.name, "Juan Sebastián Veron")
+        self.assertEqual(str(client.phone), "54221555232")
+        self.assertEqual(client.city, "La Plata")
+        self.assertEqual(client.email, "juan.veron@vetsoft.com")
+
     def test_should_not_be_able_to_create_a_client_with_number_in_name(self):
         """
         Verifica que no se pueda crear un cliente con numeros en el nombre

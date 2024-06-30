@@ -9,7 +9,7 @@
     <div class="row">
         <div class="col-lg-6 offset-lg-3">
             <form
-                class="vstack gap-3 {% if errors %}was-validated{% endif %}"
+                class="vstack gap-3"
                 aria-label="Formulario de creación de cliente"
                 method="POST"
                 action="{% url 'clients_form' %}"
@@ -59,7 +59,7 @@
                         type="email"
                         id="email"
                         name="email"
-                        class="form-control {% if errors.email %}is-invalid{% endif %}"
+                        class="form-control {% if errors.email %}is-invalid{% elif client.email %}is-valid{% endif %}"
                         value="{{ client.email }}"
                         pattern="^[a-zA-Z0-9._%+-]+@vetsoft\.com$"
                         title="El email debe finalizar con '@vetsoft.com'."
