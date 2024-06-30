@@ -130,20 +130,52 @@ class ClientsTest(TestCase):
         response = self.client.get(reverse("clients_edit", kwargs={"id": 100}))
         self.assertEqual(response.status_code, 404)
 
-    def test_validation_invalid_email(self):
+    def test_validation_valid_email(self):
         """
-        Verifica que en el caso de ingresar un mail no valido de un aviso
+        Verifica que se acepta un email válido que termine con '@vetsoft.com'.
         """
         response = self.client.post(
             reverse("clients_form"),
             data={
                 "name": "Juan Sebastian Veron",
                 "phone": "54221555232",
-                "address": "13 y 44",
+                "city": "La Plata",
+                "email": "juan.veron@vetsoft.com",
+            },
+        )
+
+        # Verifica que no hay errores en la respuesta y que redirige al repositorio de clientes
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("clients_repo"))
+
+        # Verifica que el cliente se ha guardado correctamente en la base de datos
+        client = Client.objects.get(email="juan.veron@vetsoft.com")
+        self.assertIsNotNone(client)
+        self.assertEqual(client.name, "Juan Sebastian Veron")
+        self.assertEqual(str(client.phone), "54221555232")  # Convertimos phone a string
+        self.assertEqual(client.city, "La Plata")
+        self.assertEqual(client.email, "juan.veron@vetsoft.com")
+
+    def test_validation_invalid_email(self):
+        """
+        Verifica que se muestra un mensaje de error cuando se ingresa un email inválido.
+        """
+        response = self.client.post(
+            reverse("clients_form"),
+            data={
+                "name": "Juan Sebastian Veron",
+                "phone": "54221555232",
+                "city": "La Plata",
                 "email": "brujita75",
             },
         )
-        self.assertContains(response, "Por favor ingrese un email valido")
+
+        # Verifica que se muestra el mensaje de error correcto
+        self.assertContains(response, "Por favor ingrese un email valido que termine con @vetsoft.com")
+
+        # Verifica que el cliente no se ha guardado en la base de datos
+        with self.assertRaises(Client.DoesNotExist):
+            Client.objects.get(email="brujita75")
 
     def test_validation_format_vet(self):
         """
