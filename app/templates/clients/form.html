@@ -10,6 +10,7 @@
         <div class="col-lg-6 offset-lg-3">
             <form
                 class="vstack gap-3"
+                class="vstack gap-3"
                 aria-label="Formulario de creación de cliente"
                 method="POST"
                 action="{% url 'clients_form' %}"
@@ -27,6 +28,7 @@
                         name="name"
                         value="{{ client.name }}"
                         class="form-control {% if errors.name %}is-invalid{% elif client.name %}is-valid{% endif %}"
+                        class="form-control {% if errors.name %}is-invalid{% elif client.name %}is-valid{% endif %}"
                         pattern="[A-Za-z\s]*"
                         title="El nombre solo puede contener letras y espacios."
                         required
@@ -43,6 +45,7 @@
                         id="phone"
                         name="phone"
                         type="tel"
+                        class="form-control {% if errors.phone %}is-invalid{% elif client.phone %}is-valid{% endif %}"
                         class="form-control {% if errors.phone %}is-invalid{% elif client.phone %}is-valid{% endif %}"
                         value="{{ client.phone|default_if_none:'' }}"
                         oninput="this.value = this.value.replace(/[^\d]/g, '')"
@@ -74,7 +77,7 @@
                     <label for="city" class="form-label">Ciudad</label>
                     <select name="city" 
                     id="city"
-                    class="form-control {% if errors.city %}is-invalid{% elif client.city %}is-valid{% endif %}"
+                    class="form-control {% if errors.city %}is-invalid{% elif client.city %}is-valid{% endif %}" 
                     required>
                         <option value="" disabled selected hidden>Seleccionar ciudad...</option>
                         {% for key, value in cities.items %}
