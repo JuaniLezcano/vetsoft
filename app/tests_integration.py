@@ -177,6 +177,27 @@ class ClientsTest(TestCase):
         with self.assertRaises(Client.DoesNotExist):
             Client.objects.get(email="brujita75")
 
+    def test_validation_invalid_email_with_other_format(self):
+        """
+        Verifica que se muestra un mensaje de error cuando se ingresa un email inválido con otro formato
+        """
+        response = self.client.post(
+            reverse("clients_form"),
+            data={
+                "name": "Juan Sebastian Veron",
+                "phone": "54221555232",
+                "city": "La Plata",
+                "email": "brujita75@hotmail.com",
+            },
+        )
+
+        # Verifica que se muestra el mensaje de error correcto
+        self.assertContains(response, "Por favor ingrese un email valido que termine con @vetsoft.com")
+
+        # Verifica que el cliente no se ha guardado en la base de datos
+        with self.assertRaises(Client.DoesNotExist):
+            Client.objects.get(email="brujita75@hotmail.com")
+
     def test_validation_format_vet(self):
         """
         Valido que el formato sea el correcto, en caso de no serlo da un error

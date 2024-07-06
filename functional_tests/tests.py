@@ -357,9 +357,9 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
             "href", reverse("clients_edit", kwargs={"id": client.id}),
         )
 
-    def test_shouldnt_be_able_to_create_a_new_client_with_wrong_email(self):
-        """"
-        Caso de prueba para el formulario de clientes, este caso de prueba verificará que no se crea un cliente con email incorrecto.
+    def test_should_not_be_able_to_create_a_client_with_invalid_email(self):
+        """
+        Verifica que no se pueda crear un cliente con mail que no termine en vetsoft.com
         """
         self.page.goto(f"{self.live_server_url}{reverse('clients_form')}")
 
@@ -367,10 +367,12 @@ class ClientCreateEditTestCase(PlaywrightTestCase):
 
         self.page.get_by_label("Nombre").fill("Juan Sebastián Veron")
         self.page.get_by_label("Teléfono").fill("54221555232")
-        self.page.get_by_label("Email").fill("brujita75@gmail.com")
-        self.page.get_by_label("Ciudad").select_option("Ensenada")
+        self.page.get_by_label("Email").fill("brujita75@hotmail.com")
+        self.page.get_by_label("Ciudad").select_option("La Plata")
 
         self.page.get_by_role("button", name="Guardar").click()
+
+        expect(self.page.get_by_text("Por favor ingrese un email valido que termine con @vetsoft.com")).to_be_visible()
     def test_should_not_be_able_to_create_a_client_with_number_in_name(self):
         """
         Verifica que no se pueda crear un cliente con numeros en el nombre
